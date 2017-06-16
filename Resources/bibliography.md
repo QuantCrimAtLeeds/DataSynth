@@ -22,6 +22,27 @@ not releasing confidential (e.g. census-level) data.  Much of this work seems to
    - Describes ideas around the infrastructure needed to support data centres, with (partially) synthetic data being used to allow researchers to develop techniques, before those techniques are run securely on the real data (for example).
 
 
+# Crime related links
+
+## Offender movement patterns
+
+1. Wiles, Costello, "The road to nowhere: The evidence for travelling criminals."  Home Office Research Study 207.
+  [Briefing paper](http://www.popcenter.org/tools/offender_interviews/PDFs/WilesCostello.pdf)
+  [Full paper](http://library.college.police.uk/docs/hors/hors207.pdf)
+
+2. Analysis by Andrew Brumwell on offender movement.  I haven't been able to find a formal publication.  See however
+   - Page 43 of [Become a Problem
+Solving Crime Analyst](http://www.popcenter.org/library/reading/PDFs/55stepsUK.pdf)
+   - [Slides from talk by Andrew Brumwell](http://www.intelligenceanalysis.net/NAWG%20-%20West%20Midlands.pdf)
+
+3. A "pioneering study": [Crimes in Minneapolis - Proposals for prevention](https://www.ncjrs.gov/App/Publications/abstract.aspx?ID=41627).  Doesn't appear to be online or in the library.
+
+
+## Victim patterns
+
+1. Groff, La Vigne, "Mapping an Opportunity Surface of Residential Burglary".  [doi:10.1177/0022427801038003003](http://journals.sagepub.com/doi/abs/10.1177/0022427801038003003).
+
+
 ### Related papers
 
 1. Alex David Singleton, Seth Spielman & Chris Brunsdon (2016) "Establishing
