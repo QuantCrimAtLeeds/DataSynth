@@ -1,19 +1,15 @@
 ---
-<<<<<<< HEAD
 title: "Generating synthetic data using `stpp` package in R"
 author: "geoMADE"
 date: "19 October 2017"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
-=======
-title: "SFSFDSFDS"
-author: "Monsuru"
-date: "16 October 2017"
-output: github_document
->>>>>>> 0872cd2dd5fa0226c20e40c52104fe6c6e6a6aca
 ---
+
+NOTE: TO HTML-PREVIEW THIS DOCUMENT, FOLLOW THE FOLLOWING STEPS:
+1. CLICK 
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
