@@ -1,9 +1,9 @@
 ---
-<<<<<<< HEAD
 title: "Generating synthetic data using `stpp` package in R"
 author: "geoMADE"
 date: "19 October 2017"
 output:
+<<<<<<< HEAD
  
    html_document: default
 =======
@@ -12,7 +12,16 @@ author: "Monsuru"
 date: "16 October 2017"
 output: github_document
 >>>>>>> 0872cd2dd5fa0226c20e40c52104fe6c6e6a6aca
+=======
+  html_document: default
+>>>>>>> c8704a4cfad98d706b7a23432d41bbf1fd63d1f1
 ---
+
+NoTE: The github doesn't currently render the latex equations typed in 'rmarkdown' document. Therefore, in order to preview this document with equations properly rendered, follow the below steps:
+
+1. Click on the 'DataSyn' directory
+2. Click on the 'SyntheticDataInR.html' file, and copy the GitHub URL
+3. Use this tool to preview it: http://htmlpreview.github.io/  (Credit: Jennifer Bryan)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
