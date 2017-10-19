@@ -10,7 +10,7 @@ html_document: default
 
 NoTE: The github doesn't currently render the latex equations typed in 'rmarkdown' document. Therefore, in order to preview this document with equations properly rendered, follow the below steps:
 
-1. Click on the 'DataSyn' directory
+1. Click on the 'DataSynth' directory
 2. Click on the 'SyntheticDataInR.html' file, and copy the GitHub URL
 3. Use this tool to preview it: http://htmlpreview.github.io/  (Credit: Jennifer Bryan)
 
