@@ -53,6 +53,7 @@ The `rpp` function is used to synthesise point process based on the HPP and IHPP
 ```{r cars}
 summary(cars)
 ```
+<<<<<<< HEAD
 
 ## Including Plots
 
@@ -65,3 +66,5 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 >>>>>>> 852bf2d529ccbd7a36e25d4836c79f0f581c8d48:DataSynthUsingR/SyntheticDataInR.rmd
 >>>>>>> 78f3ea7486af05d30013f74bd1ba498f4472c09c
+=======
+>>>>>>> f8162ca6171c6e0b42704d7eefe668ed3792965c
