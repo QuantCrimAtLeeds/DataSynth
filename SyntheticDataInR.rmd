@@ -4,8 +4,7 @@ author: "geoMADE"
 date: "19 October 2017"
 output:
 <<<<<<< HEAD
- 
-   html_document: default
+html_document: default
 >>>>>>> c8704a4cfad98d706b7a23432d41bbf1fd63d1f1
 ---
 
