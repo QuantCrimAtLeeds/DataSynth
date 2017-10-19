@@ -9,7 +9,6 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="geoMADE" />
 
 <meta name="date" content="2017-10-19" />
 
@@ -118,19 +117,17 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Generating synthetic data using <code>stpp</code> package in R</h1>
-<h4 class="author"><em>geoMADE</em></h4>
 <h4 class="date"><em>19 October 2017</em></h4>
 
 </div>
 
 
-<p>In R environment, the <strong>stpp</strong> package is the only package that provides the functions for synthesizing point process in space and time over a wide class of models. For the purpose of this post, we will look at three models, namely; the Homogeneous Poisson Process (HPP), Inhomogeneous Poisson Process (IHPP), and Poisson cluster process (PCP). These models are chosen because of their relevance from the viewpoint of crime data analytics. These will be discussed along with their formulations.</p>
-<p>The <code>rpp</code> function is used to synthesise point process based on the HPP and IHPP models, while the <code>rpcp</code> function is used to synthesise point process based on the PCP model. In this exercise, the point processes are generated within a 3D region defined spatially by the geographical boundary of South Chicago, and temporally by one year time interval i.e. <span class="math inline">\(t =c(1, 365)\)</span>.</p>
-<p><strong>1. Homogeneous Poisson process (HPP)</strong></p>
-<p>The simplest stochastic model for generating STPP. It is generally used as the benchmark of complete spatio-temporal randomness (CSTR). Given a spatio-temporal region <span class="math inline">\(S\times T\)</span>, the events form an independent random sample from the uniform distribution on <span class="math inline">\(S\times T\)</span>. Hence, a homogenous Poisson process can be defined more formally by the following postulations: (i) For some intensity <span class="math inline">\(\lambda \ge 0\)</span>, the number <span class="math inline">\(Y(S\times T)\)</span> of events within the region <span class="math inline">\(S\times T\)</span> is defined by a Poisson distribution with mean <span class="math inline">\(\lambda |S||T|\)</span>, where <span class="math inline">\(|.|\)</span> denotes 2D area. (ii) Given <span class="math inline">\(Y(S\times T)=n\)</span>, the events form an independent random sample from the uniform distribution on <span class="math inline">\(S\times T\)</span>.</p>
-<p><em>Properties:</em> The <span class="math inline">\(1^{st}-order\)</span> and <span class="math inline">\(2^{nd}-order\)</span> intensities are the constants, <span class="math inline">\(\lambda(s,t)=\lambda\)</span> and <span class="math inline">\(\lambda_2((s_i,t_i), (s_j,t_j))=\lambda^2\)</span>, respectively. The covariance density is identically zero, and the pair correlation function identically 1, and the STIK function is <span class="math inline">\(K_{ST}(u,v)=\pi u^2v\)</span>.</p>
-<p><em>Simulation Study:</em></p>
-<p>To synthesise a homogeneous Poisson point process in <span class="math inline">\(S\times T\)</span> using the <code>rpp</code> function, two steps are involved, namely; (1) Simulate the number <span class="math inline">\(n=Y(S\times T)\)</span> of points according to Poisson distribution with mean <span class="math inline">\(\lambda|S||T|\)</span>, and (2) Sample each of the <span class="math inline">\(n\)</span> locations and <span class="math inline">\(n\)</span> times according to a uniform distribution on <span class="math inline">\(S\)</span> and on <span class="math inline">\(T\)</span> respectively.</p>
+<p>NoTE: The github doesn’t currently render the latex equations typed in ‘rmarkdown’ document. Therefore, in order to preview this document with equations properly rendered, follow the below steps:</p>
+<ol style="list-style-type: decimal">
+<li>Click on the ‘DataSyn’ directory</li>
+<li>Click on the ‘SyntheticDataInR.html’ file, and copy the GitHub URL</li>
+<li>Use this tool to preview it: <a href="http://htmlpreview.github.io/" class="uri">http://htmlpreview.github.io/</a> (Credit: Jennifer Bryan)</li>
+</ol>
 
 
 
