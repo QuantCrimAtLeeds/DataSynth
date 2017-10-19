@@ -14,57 +14,47 @@ NOTE: Github doesn't currently render the latex equations typed in 'rmarkdown' d
 2. Click on the 'SyntheticDataInR.html' file, and copy the GitHub URL
 3. Use this tool to preview it: http://htmlpreview.github.io/  (credit to:Jennifer Bryan)
 
-<<<<<<< HEAD
-
-=======
-## R Markdown
-
 In R environment, the **stpp** package is the only package that provides the functions for synthesizing point process in space and time over a wide class of models. For the purpose of this post, we will look at three models, namely; the Homogeneous Poisson Process (HPP), Inhomogeneous Poisson Process (IHPP), and Poisson cluster process (PCP). These models are chosen because of their relevance from the viewpoint of crime data analytics. These will be discussed along with their formulations. 
 
-The `rpp` function is used to synthesise point process based on the HPP and IHPP models, while the ` rpcp` function is used to synthesise point process based on the PCP model. In this exercise, the point processes are generated within a 3D region defined spatially by the geographical boundary of South Chicago, and temporally by one year time interval i.e. $t =c(1, 365)$. $$y_i = \alpha + \beta x_i + e_i$$.
+The `rpp` function is used to synthesise point process based on the HPP and IHPP models, while the ` rpcp` function is used to synthesise point process based on the PCP model. In this exercise, the point processes are generated within a 3D region defined spatially by the geographical boundary of South Chicago, and temporally by one year time interval i.e. $t =c(1, 365)$.
 
-```{r cars}
-summary(cars)
+**1. Homogeneous Poisson process (HPP)**
+
+The simplest stochastic model for generating STPP. It is generally used as the benchmark of complete spatio-temporal randomness (CSTR). Given a spatio-temporal region $S\times T$, the events form an independent random sample from the uniform distribution on $S\times T$. Hence, a homogenous Poisson process can be defined more formally by the following postulations:
+(i)	For some intensity $\lambda \ge 0$, the number $Y(S\times T)$ of events within the region $S\times T$ is defined by a Poisson distribution with mean $\lambda |S||T|$, where $|.|$ denotes 2D area.
+(ii)	Given $Y(S\times T)=n$, the events form an independent random sample from the uniform distribution on $S\times T$.
+
+  *Properties:*
+The $1^{st}-order$ and $2^{nd}-order$ intensities are the constants, $\lambda(s,t)=\lambda$ and $\lambda_2((s_i,t_i), (s_j,t_j))=\lambda^2$, respectively. The covariance density is identically zero, and the pair correlation function identically 1, and the STIK function is $K_{ST}(u,v)=\pi u^2v$.
+
+  *Simulation Study:*
+  
+To synthesise a homogeneous Poisson point process in $S\times T$ using the `rpp` function, two steps are involved, namely; (1) Simulate the number $n=Y(S\times T)$ of points according to Poisson distribution with mean $\lambda|S||T|$, and (2) Sample each of the $n$ locations and $n$ times according to a uniform distribution on $S$ and on $T$ respectively.
+
+
+```{r comment=NA, message=F, warning=F}
+library(stpp)
+library(maptools)
+library(rgeos)
+library(splancs)
 ```
 
-## Including Plots
+```{r }
+#simulating point patterns inside a specified polygon (Boundary of South Chicago defined by two-column coordinates)
 
-You can also embed plots, for example:
+bound_area <-  read.table(file="F:/UNIVERSITY OF LEEDS SUBMISSIONS/synthesised data/rmarkdown/bound_coords.csv", sep=",",head=T)
+bound_area <-cbind(bound_area[,1], bound_area[,2])
+colnames(bound_area) <-c("x","y")
+##head(bound_area)
+Hpp2 <- rpp(npoints = 1500, s.region=bound_area, t.region = c(1, 365), discrete.time=TRUE)
+##head(Hpp2)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```
+Output: returns a matrix `xyt` (or a list of matrices if the `nsim>1`), containing the points $(x,y,t)$ of the simulated point patterns within the region `s.region` $(S)$ $\times$ `t.region` $(T)$ 
+
+```{r }
+animation(Hpp2$xyt, s.region=Hpp2$s.region)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The above is a realisation of the Poisson process with intensity $\lambda=1000/(|S||T|)$, but conditioned to produce exactly 1500 points within $S$, the South Chicago boundary, and $T$, between the time interval 1 and 365 days. Coincident times are allowed by the `replace` argument. In the animation, time is treated as a quantitative mark highlighting the currency of the events. The points are fairly evenly distributed across the area.
 
-
-NoTE: The github doesn't currently render the latex equations typed in 'rmarkdown' document. Therefore, in order to preview this document with equations properly rendered, follow the below steps:
-
-1. Click on the 'DataSyn' directory
-2. Click on the 'SyntheticDataInR.html' file, and copy the GitHub URL
-3. Use this tool to preview it: http://htmlpreview.github.io/  (Credit: Jennifer Bryan)
-
-## R Markdown
-
-In R environment, the **stpp** package is the only package that provides the functions for synthesizing point process in space and time over a wide class of models. For the purpose of this post, we will look at three models, namely; the Homogeneous Poisson Process (HPP), Inhomogeneous Poisson Process (IHPP), and Poisson cluster process (PCP). These models are chosen because of their relevance from the viewpoint of crime data analytics. These will be discussed along with their formulations. 
-
-The `rpp` function is used to synthesise point process based on the HPP and IHPP models, while the ` rpcp` function is used to synthesise point process based on the PCP model. In this exercise, the point processes are generated within a 3D region defined spatially by the geographical boundary of South Chicago, and temporally by one year time interval i.e. $t =c(1, 365)$. $$y_i = \alpha + \beta x_i + e_i$$.
-
-```{r cars}
-summary(cars)
-```
-<<<<<<< HEAD
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
->>>>>>> 852bf2d529ccbd7a36e25d4836c79f0f581c8d48:DataSynthUsingR/SyntheticDataInR.rmd
->>>>>>> 78f3ea7486af05d30013f74bd1ba498f4472c09c
-=======
->>>>>>> f8162ca6171c6e0b42704d7eefe668ed3792965c
