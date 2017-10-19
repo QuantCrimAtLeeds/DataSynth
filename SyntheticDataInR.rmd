@@ -2,7 +2,7 @@
 title: "SFSFDSFDS"
 author: "Monsuru"
 date: "16 October 2017"
-output: github document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
