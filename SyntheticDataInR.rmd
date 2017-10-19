@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In R environment, the **stpp** package is the only package that provides the functions for synthesizing point process in space and time over a wide class of models. For the purpose of this post, we will look at three models, namely; the Homogeneous Poisson Process (HPP), Inhomogeneous Poisson Process (IHPP), and Poisson cluster process (PCP). These models are chosen because of their relevance from the viewpoint of crime data analytics. These will be discussed along with their formulations. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+The `rpp` function 
 
 ```{r cars}
 summary(cars)
