@@ -1,6 +1,6 @@
 ---
 title: "Generating synthetic data using `stpp` package in R"
-author: " "
+author: "monsuru"
 date: "19 October 2017"
 output: html_document
 ---
@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 NOTE: Github doesn't currently render the latex equations typed in 'rmarkdown' document. Therefore, in order to preview this document (with equations properly rendered), follow the below steps:
 
 1. Click on the 'DataSynthUsingR' directory
