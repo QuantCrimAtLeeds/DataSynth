@@ -10,5 +10,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 A street adjacency matrix $M$ is the mathematical representation of the connectivity (relationships) between the segments of a street network. In geographical data analysis, it might be important to know which segments (edges) in a network are connected to one another, in order to model the propagation of a geographical phenomenon such as crime risk or traffic flow across the network. The adjacency matrix ($n \times n$) provides a simple way of defining such connectivity with an entry "1" for any pair of segments that are directly connected to the same node, and "0" if they are not. Figure 1 is an example of an adjacency matrix of a network comprising seven segments. 
 
-![Image](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Street_Net.jpg?raw=true)
-Figure 1. A portion of street network of  South Chicago
+<center>![](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Adj_Matrix.jpg?raw=true)</center>
+<center>Figure 1. A sample street network and its adjacency matrix</center>
+
+The above matrix is regarded as the 1st-order adjacency matrix of the network. Similarly, one may define the 2nd-order adjacency, 3rd-order adjacency and so on, depending on the application. The connection between segment 3 and segment 7 relative to segment 1 is considered a 2nd-order adjacency because both segments are not directly connected segment 1 but to its 1st-order segments. The connection between segment 1 and segment 4 is an example of a 3rd-order adjacency, and so on. The idea of adjacency matrix has been applied in transport studies [Anbaroglu et al., 2014]( https://ac.els-cdn.com/S0968090X14002186/1-s2.0-S0968090X14002186-main.pdf?_tid=a7e818f0-b716-11e7-a475-00000aacb35f&acdnat=1508669539_bc0345a87773208b4edda25ee5935c65) to define the flow of traffic across a network.
+
+In other studies involving air and railway journeys, the connectivity may be defined in relation to the nodes (cities or stations). It might be important to know if it is possible to get from one node to another, without reference to the distance between them. While this question is relatively easy to answer for a small graph, it becomes harder as the number of nodes and edges grow. The adjacency matrix can help to simplify the answers to such a question.
+
+Given a street network shapefile (.shp), the below R script can be used to generate an adjacency matrix $M$ for the shapefile. If the order specified is greater than 1, an array $M[n \times n \times r]$ is generated, where $n$ is the number of segments in the network and $r$ is the order. The output is generated as a .RData.
+
+
+
+
+<center>![](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Street_Net.jpg?raw=true)</center>
+
+<center>Figure 2. A portion of street network of  South Chicago</center>
+
