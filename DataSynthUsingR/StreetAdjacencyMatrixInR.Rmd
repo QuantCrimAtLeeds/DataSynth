@@ -1,1 +1,14 @@
+---
+title: "Street adjacency matrix"
+author: "monsuru"
+date: "19 October 2017"
+output: html_document
+---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+A street adjacency matrix $M$ is the mathematical representation of the connectivity (relationships) between the segments of a street network. In geographical data analysis, it might be important to know which segments (edges) in a network are connected to one another, in order to model the propagation of a geographical phenomenon such as crime risk or traffic flow across the network. The adjacency matrix ($n \times n$) provides a simple way of defining such connectivity with an entry "1" for any pair of segments that are directly connected to the same node, and "0" if they are not. Figure 1 is an example of an adjacency matrix of a network comprising seven segments. 
+
+![Image](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Street_Net.jpg?raw=true)
+Figure 1. A portion of street network of  South Chicago
