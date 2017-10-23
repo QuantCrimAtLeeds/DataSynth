@@ -19,10 +19,72 @@ In other studies involving air and railway journeys, the connectivity may be def
 
 Given a street network shapefile (.shp), the below R script can be used to generate an adjacency matrix $M$ for the shapefile. If the order specified is greater than 1, an array $M[n \times n \times r]$ is generated, where $n$ is the number of segments in the network and $r$ is the order. The output is generated as a .RData.
 
+**import the libraries**
+```{r comment=NA, message=F, warning=F}
+library(rgdal)
+library(igraph)
+library(abind)
+```
 
+The 'igraph' in R provides a number of functions that could be used to construct the Adjacency matrix of this network. The igraph library is also available in Python
 
-
+```{r }
+#import the street network
+setwd("F:/UNIVERSITY OF LEEDS SUBMISSIONS/synthesised data/rmarkdown/shapefiles/")
+road_Network <- readOGR(dsn=".", layer="road_Network")  
+#visualising the road network
+```
 <center>![](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Street_Net.jpg?raw=true)</center>
 
-<center>Figure 2. A portion of street network of  South Chicago</center>
+<center>Figure 2. A portion of South Chicago's street network</center>
+
+
+
+To construct the Adjacency matrix, there is a need to first extract the nodes connections between the segments. The below codes achieves this.
+
+```{r comment=NA, message=F, warning=F}
+#Generating the start- and end- nodes for each segment 
+res <- lapply(slot(road_Network, "lines"), function(x) lapply(slot(x, "Lines"),
+   function(y) slot(y, "coords")))
+
+uniqueIDs <- NULL
+for(i in 1:length(res)){ #222
+x1 <- res[[i]][[1]][1,1]
+y1<-  res[[i]][[1]][1,2]
+x2 <- res[[i]][[1]][nrow(res[[i]][[1]]),1]
+y2<-  res[[i]][[1]][nrow(res[[i]][[1]]),2]
+xy1 <- paste(trunc(x1),trunc(y1),sep="")
+xy2 <- paste(trunc(x2),trunc(y2),sep="")
+uniqueIDs <- rbind(uniqueIDs, xy1, xy2)
+}#222
+uni_IDs <- unique(uniqueIDs)
+
+#----------------------------
+road_Network_Database <- NULL
+#--------------------------------------
+for(i in 1:length(res)){	#9999
+
+	x1 <- res[[i]][[1]][1,1]
+	y1<-  res[[i]][[1]][1,2]
+
+	x2 <- res[[i]][[1]][nrow(res[[i]][[1]]),1]
+	y2<-  res[[i]][[1]][nrow(res[[i]][[1]]),2]
+
+	xy1 <- paste(trunc(x1),trunc(y1),sep="")
+	xy2 <- paste(trunc(x2),trunc(y2),sep="")
+	
+	road_Network_Database <- rbind(road_Network_Database, cbind(i,  which(uni_IDs[,1]== xy1), which(uni_IDs[,1]== xy2)))
+	
+} #9999
+
+road_Network_Database <- data.frame(road_Network_Database)
+colnames(road_Network_Database) <- c("id", "Start_Node", "End_Node")
+head(road_Network_Database)
+
+```
+
+**Specify the number of adjacency order to generate**
+
+NumOrder <- 3
+
 
