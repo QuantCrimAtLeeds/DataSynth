@@ -182,7 +182,7 @@ final_adj_Matrix_SS[1:8, 1:8, 2]
 final_adj_Matrix_SS[1:8, 1:8, 3]
 ```
 
-```{r}
+```{r warning=F}
 #saving the final matrix (array)
 save(final_adj_Matrix_SS, file="final_adj_Matrix_SS.RData")
 ```
