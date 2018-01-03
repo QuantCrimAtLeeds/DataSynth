@@ -82,9 +82,55 @@ For an idea scenario (that is, where all the repeat victimisations occur at exac
 
 #The real and the synthetic datasets
 
-The real dataset can be found here: South Chicago burglary 2015 (2,163 records)[]
 
-The following are the generated synthetic datasets (distinguished by the value of K and the associated temporal pattern): 
+**The real dataset can be found here:**
+
+[South Chicago burglary 2015 (2,163 records)](https://github.com/QuantCrimAtLeeds/DataSynth/tree/master/DataSynthUsingR/datasets/real%20dataset])
+
+The following table shows the number of record in each synthetic datasets generated (distinguished by the value of K and the associated temporal pattern): 
+
+```{r, echo=FALSE}
+r = readRDS("extdata/synthetic_Count.rds")
+knitr::kable(r[c(1:4)], full_width = F, align=c(rep('c',times=2)), caption = "Table 1. Number of records for the synthetic datasets")
+```
+
+Click the [here](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/datasets/synthetic%20datasets/) to download any of the datasets.
+
+**3D Visualisation of the real and the synthetic datasets**
+
+In Fig. 3, the left plot shows the 3D point distribution of the real dataset, while the right plot shows the 3D point distribution of one of the synthetic data (i.e. cyclic temporal pattern with spatial bandwidth of 200m). 
+
+<!-- ```{r} -->
+<!-- library(plot3D) -->
+<!-- library(rgl) -->
+<!-- library(rgeos) -->
+<!-- library(raster) -->
+
+<!-- plot3d(crimes_shape@data$x, crimes_shape@data$y,  -->
+<!-- 	((as.numeric(crimes_shape@data$date)- min(as.numeric(crimes_shape@data$date)))*100),  -->
+<!-- 	  xlab="Long",ylab="Lat",zlab="Date", -->
+<!-- 	 grid=TRUE, box=FALSE, col="red") -->
+<!-- #adding the basemap -->
+<!-- base(road_Network,0,factor=1,col='black',add=TRUE) -->
+
+<!-- ``` -->
+
+
+
+
+ 
+
+
+The codes written to generate the synthetic dataset can be found here [link]. 
+
+
+
+
+
+#```{r}
+##knitr::kable(synthetic_Count[1:4], caption = "Characteristics of OSM route network data for case study cities.")
+#```
+
 
 
 

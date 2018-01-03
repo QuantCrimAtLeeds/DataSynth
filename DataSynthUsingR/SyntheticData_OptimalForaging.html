@@ -176,7 +176,75 @@ Fig. 3: Residential land use of South Chicago
 <p>For the purpose of this study, the repeat pattern profiles of the real dataset and the synthetic datasets are generated at varying values of K. In order to describe the repeat pattern profiles, three different temporal patterns are formulated. They are:</p>
 <p><strong>(a) Cyclic pattern:</strong> where there appears a visible cyclic pattern in dataset, such as weekly or fortnightly cycles.</p>
 <p><strong>(b) High ‘short-interval’ pattern:</strong> where there is a prominent level of repeats at short temporal lags, such as on days of the first week or two weeks.</p>
-<p><strong>(c) Random pattern:</strong> where the patterns cannot be described in terms of the above two patterns. For an idea scenario (that is, where all the repeat victimisations occur at exact same location), the first two patterns described above, will be clearly visible. However, due the fact that the most common offending patterns are ‘near-repeats’ (a situation where the next crime happens close to the location of the initial crime), the space and the time components start to interact. Consequently, it is unlikely to have a perfectly defined cyclic or high ‘short-interval’ pattern, especially at very large spatial values of K.</p>
+<p><strong>(c) Random pattern:</strong> where the patterns cannot be described in terms of the above two patterns.</p>
+<p>For an idea scenario (that is, where all the repeat victimisations occur at exact same location), the first two patterns described above, will be clearly visible. However, due the fact that the most common offending patterns are ‘near-repeats’ (a situation where the next crime happens close to the location of the initial crime), the space and the time components start to interact. Consequently, it is unlikely to have a perfectly defined cyclic or high ‘short-interval’ pattern, especially at very large spatial values of K.</p>
+</div>
+<div id="the-real-and-the-synthetic-datasets" class="section level1">
+<h1><span class="header-section-number">5</span> The real and the synthetic datasets</h1>
+<p><strong>The real dataset can be found here:</strong></p>
+<p><a href="https://github.com/QuantCrimAtLeeds/DataSynth/tree/master/DataSynthUsingR/datasets/real%20dataset%5D">South Chicago burglary 2015 (2,163 records)</a></p>
+<p>The following table shows the number of record in each synthetic datasets generated (distinguished by the value of K and the associated temporal pattern):</p>
+<table>
+<caption>Table 1. Number of records for the synthetic datasets</caption>
+<thead>
+<tr class="header">
+<th align="center">Bandwidth…t_pattern</th>
+<th align="center">Cyclic</th>
+<th align="center">High.short.interval</th>
+<th align="center">Random</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">200m</td>
+<td align="center">2,169</td>
+<td align="center">2,125</td>
+<td align="center">2,198</td>
+</tr>
+<tr class="even">
+<td align="center">400m</td>
+<td align="center">2,158</td>
+<td align="center">1,998</td>
+<td align="center">2,178</td>
+</tr>
+<tr class="odd">
+<td align="center">600m</td>
+<td align="center">2,177</td>
+<td align="center">2,155</td>
+<td align="center">2,168</td>
+</tr>
+<tr class="even">
+<td align="center">800m</td>
+<td align="center">2,204</td>
+<td align="center">2,065</td>
+<td align="center">2,257</td>
+</tr>
+<tr class="odd">
+<td align="center">1000m</td>
+<td align="center">2,152</td>
+<td align="center">2,035</td>
+<td align="center">2,131</td>
+</tr>
+</tbody>
+</table>
+<p>Click the <a href="https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/datasets/synthetic%20datasets/">here</a> to download any of the datasets.</p>
+<p><strong>3D Visualisation of the real and the synthetic datasets</strong></p>
+<!-- ```{r} -->
+<!-- library(plot3D) -->
+<!-- library(rgl) -->
+<!-- library(rgeos) -->
+<!-- library(raster) -->
+<!-- plot3d(crimes_shape@data$x, crimes_shape@data$y,  -->
+<!--    ((as.numeric(crimes_shape@data$date)- min(as.numeric(crimes_shape@data$date)))*100),  -->
+<!--      xlab="Long",ylab="Lat",zlab="Date", -->
+<!--     grid=TRUE, box=FALSE, col="red") -->
+<!-- #adding the basemap -->
+<!-- base(road_Network,0,factor=1,col='black',add=TRUE) -->
+<!-- ``` -->
+<p>The codes written to generate the synthetic dataset can be found here [link].</p>
+</div>
+<div id="r-knitrkablesynthetic_count14-caption-characteristics-of-osm-route-network-data-for-case-study-cities." class="section level1">
+<h1><span class="header-section-number">6</span> <code>{r} ##knitr::kable(synthetic_Count[1:4], caption = &quot;Characteristics of OSM route network data for case study cities.&quot;) #</code></h1>
 <p>Data were accessed from the following sources:</p>
 <ul>
 <li>Transport network and building data from <strong>OpenStreetMap (OSM)</strong>, an open access, freely available, crowd-sourced online mapping database <span class="citation">[@barrington-leigh_worlds_2017]</span>.</li>
@@ -187,20 +255,20 @@ Fig. 3: Residential land use of South Chicago
 <!-- out to 2020. -->
 </div>
 <div id="methods" class="section level1">
-<h1><span class="header-section-number">5</span> Methods</h1>
+<h1><span class="header-section-number">7</span> Methods</h1>
 <p>We have made a number of technical breakthroughs that allow us to estimate cycling potential down to the road network level based on open data. This involved implementing a highly computationally efficient routing algorithm in C++. Since commencing the project we have developed a method for re-allocating the results of the routing algorithm back onto the road network. A custom level of road segmentation was developed to create this geographical aggregated flow map, which clearly shows routes with high cycling potential (<a href="http://rpubs.com/RobinLovelace/341996">see interactive version</a>):</p>
 </div>
 <div id="r-echofalse-fig.capillustration-of-interactive-map-demonstrating-the-preliminary-results-the-routes-in-accra-with-highest-cycling-potential.-knitrinclude_graphicsfigaccra-flow1-interactive.png" class="section level1">
-<h1><span class="header-section-number">6</span> <code>{r, echo=FALSE, fig.cap=&quot;Illustration of interactive map demonstrating the preliminary results: the routes in Accra with highest cycling potential.&quot;} #knitr::include_graphics(&quot;fig/accra-flow1-interactive.png&quot;) #</code></h1>
+<h1><span class="header-section-number">8</span> <code>{r, echo=FALSE, fig.cap=&quot;Illustration of interactive map demonstrating the preliminary results: the routes in Accra with highest cycling potential.&quot;} #knitr::include_graphics(&quot;fig/accra-flow1-interactive.png&quot;) #</code></h1>
 </div>
 <div id="city-overviews" class="section level1">
-<h1><span class="header-section-number">7</span> City overviews</h1>
+<h1><span class="header-section-number">9</span> City overviews</h1>
 <p>This section provides a high-level overview about the geography of each city as it relates to active travel potential. Both cities are included in this section, laying the ground for the next two sections which provide detailed results for Accra and then Kathmandu. Comparing the cities at the outset will help put the results in perspective and lay the foundation for a discussion of how a tool building on this work could be useful to different stakeholders in each city.</p>
 <p>Accra is the larger city, with a population approaching 5 million and a growth rate of around 3% per year in the Greater Accra Region according to the <a href="http://www.statsghana.gov.gh/docfiles/2010phc/Projected%20population%20by%20sex%202010%20-%202016.pdf">Ghana Statistical Service</a>. Kathmandu has a population of just over 1.2 million, according to the <a href="http://worldpopulationreview.com/world-cities/kathmandu-population/">World Population Review</a>.</p>
 <p>We already have some results from the OSM and demographic datasets, as outlined below.</p>
 
 <div id="openstreetmap-data" class="section level2">
-<h2><span class="header-section-number">7.1</span> OpenStreetMap data</h2>
+<h2><span class="header-section-number">9.1</span> OpenStreetMap data</h2>
 <p>The OpenStreetMap network for Accra has 145,827 street segments connecting 131,349 distinct points, and extends over 4,072km. The OSM data also include 24,490 buildings, of which 23,102 include geometric descriptions only, while the remaining 1,388 buildings are divided between 28 distinct categories.</p>
 <p>The equivalent network for Kathmandu has 79,832 street segments connecting 37,770 distinct points, and extends over 1,062km. The OSM data also include 82,333 buildings of which 75,778 include geometric descriptions only, while the remaining 6,555 are divided between 344 distinct categories (in this case including many named buildings).</p>
 <table>
@@ -256,12 +324,12 @@ Fig. 3: Residential land use of South Chicago
 </table>
 </div>
 <div id="demographic-data" class="section level2">
-<h2><span class="header-section-number">7.2</span> Demographic data</h2>
+<h2><span class="header-section-number">9.2</span> Demographic data</h2>
 <p>Demographic data for Accra from worldpop include population density estimates at 172,238 points, corresponding to estimates in roughly 30-by-30m grid cells. Estimates are available for total population density, as well as distributed between 14 5-year age classes from 0-5 years up to 60-65 years, and 65+ years.</p>
 <p>Demographic data for Kathmandu are not as detailed, and also do not include age classes.</p>
 </div>
 <div id="an-overview-of-accra-from-an-active-travel-perspective" class="section level2">
-<h2><span class="header-section-number">7.3</span> An overview of Accra from an active travel perspective</h2>
+<h2><span class="header-section-number">9.3</span> An overview of Accra from an active travel perspective</h2>
 <!-- Monsuru (1 day's work) -->
 <!-- This section will provide background information on the following topics: -->
 <!-- - Institutions working in transport and their aims -->
@@ -271,17 +339,17 @@ Fig. 3: Residential land use of South Chicago
 <!-- - Recent transport policies. -->
 <!-- - How well developed are other infrastructures (e.g. sewerage.) -->
 <div id="greater-accra-metropolitan-area-gama" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Greater Accra Metropolitan Area (GAMA)</h3>
+<h3><span class="header-section-number">9.3.1</span> Greater Accra Metropolitan Area (GAMA)</h3>
 <p>The Greater Accra Metropolitan Area, simply referred to as Accra city, is the smallest geographical region of Ghanaâs 10 administrative regions, covering only 1.4 percent of the total land area of Ghana (see Fig. xx). It is the second most populous region, after the Ashanti region. According to the Ghana Statistical Service, Accra cityâs population is estimated to be approaching 5 million, with a growth rate of around 3% per year. Fifty six percent of the population is estimated to be under 24 years of age, with fifty-one percent (51%) of the population being females, and the remaining 49% males, giving a male-to-female ratio of 1:1.04.</p>
 </div>
 </div>
 </div>
 <div id="r-fig.capgeographical-location-of-greater-accra-metropolitan-area-gama-knitrinclude_graphicsfigstudy-area-accra.png" class="section level1">
-<h1><span class="header-section-number">8</span> <code>{r, fig.cap=&quot;Geographical location of Greater Accra Metropolitan Area (GAMA)&quot;} #knitr::include_graphics(&quot;fig/study-area-accra.png&quot;) #</code></h1>
+<h1><span class="header-section-number">10</span> <code>{r, fig.cap=&quot;Geographical location of Greater Accra Metropolitan Area (GAMA)&quot;} #knitr::include_graphics(&quot;fig/study-area-accra.png&quot;) #</code></h1>
 <p>Accra city comprises 10 of the 216 local authority districts of the Republic of Ghana. Administratively, the Accra Metropolitan local authority district serves as the capital of Accra city, and is administered by Accra Metropolitan Assembly, which is the political and administrative authority for the entire Accra city.</p>
 <p><span class="citation">[@quarshie_integrating_2007]</span></p>
 <div id="an-overview-of-kathmandu-from-an-active-travel-perspective" class="section level2">
-<h2><span class="header-section-number">8.1</span> An overview of Kathmandu from an active travel perspective</h2>
+<h2><span class="header-section-number">10.1</span> An overview of Kathmandu from an active travel perspective</h2>
 <p>This section will provide background information on the following topics:</p>
 <ul>
 <li>Institutions working in transport and their aims</li>
@@ -294,26 +362,26 @@ Fig. 3: Residential land use of South Chicago
 </div>
 </div>
 <div id="results-i-accra" class="section level1">
-<h1><span class="header-section-number">9</span> Results I: Accra</h1>
+<h1><span class="header-section-number">11</span> Results I: Accra</h1>
 <p>This section is work in progress. We will explore how well the OSM road network illustrated in the map below represents the true state of the transport system.</p>
 </div>
 <div id="r-fig.capoverview-of-accra-left-and-initial-results-of-cycling-potential-right.-fig.showhold-out.width49-knitrinclude_graphicscfigaccra-osm-overview.png-figtest.png" class="section level1">
-<h1><span class="header-section-number">10</span> <code>{r, fig.cap=&quot;Overview of Accra (left) and initial results of cycling potential (right).&quot;, fig.show='hold', out.width=&quot;49%&quot;} #knitr::include_graphics(c(&quot;fig/accra-osm-overview.png&quot;, &quot;fig/test.png&quot;)) #</code></h1>
+<h1><span class="header-section-number">12</span> <code>{r, fig.cap=&quot;Overview of Accra (left) and initial results of cycling potential (right).&quot;, fig.show='hold', out.width=&quot;49%&quot;} #knitr::include_graphics(c(&quot;fig/accra-osm-overview.png&quot;, &quot;fig/test.png&quot;)) #</code></h1>
 <p>We have generated estimates for cycling potential across the larger of the two case study cities. The priority over the next 3 weeks of the project will be to calibrate this model and apply refined versions of it to both cities, using additional input datasets where available.</p>
 </div>
 <div id="results-ii-kathmandu" class="section level1">
-<h1><span class="header-section-number">11</span> Results II: Kathmandu</h1>
+<h1><span class="header-section-number">13</span> Results II: Kathmandu</h1>
 <p>This section is work in progress.</p>
 </div>
 <div id="validation-and-calibration" class="section level1">
-<h1><span class="header-section-number">12</span> Validation and calibration</h1>
+<h1><span class="header-section-number">14</span> Validation and calibration</h1>
 <p>This section is work in progress.</p>
 </div>
 <div id="discussion" class="section level1">
-<h1><span class="header-section-number">13</span> Discussion</h1>
+<h1><span class="header-section-number">15</span> Discussion</h1>
 <p>This section is work in progress.</p>
 <div id="policy-relevance-of-results" class="section level2">
-<h2><span class="header-section-number">13.1</span> Policy relevance of results</h2>
+<h2><span class="header-section-number">15.1</span> Policy relevance of results</h2>
 <!-- To what extent has this deliverable (from phase 1) been delivered? -->
 <!-- **Deliverables:** This phase will provide clean datasets and summary information about the 'data landscape' of each case study city. -->
 <!-- This will relate primarily to population density, trip attractors and transport infrastructure from which to -->
@@ -321,15 +389,15 @@ Fig. 3: Residential land use of South Chicago
 <!-- The deliverables will be provided in the form of datasets provided to the WHO and interactive and high quality maps. -->
 </div>
 <div id="the-potential-uses-of-an-online-toolkit" class="section level2">
-<h2><span class="header-section-number">13.2</span> The potential uses of an online toolkit</h2>
+<h2><span class="header-section-number">15.2</span> The potential uses of an online toolkit</h2>
 </div>
 </div>
 <div id="next-steps" class="section level1">
-<h1><span class="header-section-number">14</span> Next steps</h1>
+<h1><span class="header-section-number">16</span> Next steps</h1>
 <p>This section is work in progress.</p>
 </div>
 <div id="references" class="section level1">
-<h1><span class="header-section-number">15</span> References</h1>
+<h1><span class="header-section-number">17</span> References</h1>
 <!-- Anything else to consider here guys? -->
 </div>
 
