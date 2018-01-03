@@ -1,0 +1,189 @@
+---
+title: "Street adjacency matrix"
+author: "monsuru"
+date: "19 October 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+A street adjacency matrix $M$ is the mathematical representation of the connectivity (relationships) between the segments of a street network. In geographical data analysis, it might be important to know which segments (edges) in a network are connected to one another, in order to model the propagation of a geographical phenomenon such as crime risk or traffic flow across the network. The adjacency matrix ($n \times n$) provides a simple way of defining such connectivity with an entry "1" for any pair of segments that are directly connected to the same node, and "0" if they are not. Figure 1 is an example of an adjacency matrix of a network comprising seven segments. 
+
+<center>![](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Adj_Matrix.jpg?raw=true)</center>
+<center>Figure 1. A sample street network and its adjacency matrix</center>
+
+The above matrix is regarded as the 1st-order adjacency matrix of the network. Similarly, one may define the 2nd-order adjacency, 3rd-order adjacency and so on, depending on the application. The connection between segment 3 and segment 7 relative to segment 1 is considered a 2nd-order adjacency because both segments are not directly connected segment 1 but to its 1st-order segments. The connection between segment 1 and segment 4 is an example of a 3rd-order adjacency, and so on. The idea of adjacency matrix has been applied in transport studies [Anbaroglu et al., 2014]( https://ac.els-cdn.com/S0968090X14002186/1-s2.0-S0968090X14002186-main.pdf?_tid=a7e818f0-b716-11e7-a475-00000aacb35f&acdnat=1508669539_bc0345a87773208b4edda25ee5935c65) to define the flow of traffic across a network.
+
+In other studies involving air and railway journeys, the connectivity may be defined in relation to the nodes (cities or stations). It might be important to know if it is possible to get from one node to another, without reference to the distance between them. While this question is relatively easy to answer for a small graph, it becomes harder as the number of nodes and edges grow. The adjacency matrix can help to simplify the answers to such a question.
+
+Given a street network shapefile (.shp), the below R script can be used to generate an adjacency matrix $M$ for the shapefile. If the order specified is greater than 1, an array $M[n \times n \times r]$ is generated, where $n$ is the number of segments in the network and $r$ is the order. The output is generated as a .RData.
+
+**import the libraries**
+```{r comment=NA, message=F, warning=F}
+library(rgdal)
+library(igraph)
+library(abind)
+```
+
+The 'igraph' in R provides a number of functions that could be used to construct the Adjacency matrix of this network. The igraph library is also available in Python
+
+```{r }
+#import the street network
+setwd("F:/UNIVERSITY OF LEEDS SUBMISSIONS/synthesised data/rmarkdown/shapefiles/")
+road_Network <- readOGR(dsn=".", layer="road_Network")  
+#visualising the road network
+```
+<center>![](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/resources/Street_Net.jpg?raw=true)</center>
+
+<center>Figure 2. A portion of South Chicago's street network</center>
+<center>*The encircled part is to highlight the first few segments that will be used to preview the results in subsequent sections*</center>
+
+<br />
+
+To construct the Adjacency matrix, there is a need to first extract the nodes connections between the segments. The below codes achieves this.
+
+```{r comment=NA, message=F, warning=F}
+#Generating the start- and end- nodes for each segment 
+res <- lapply(slot(road_Network, "lines"), function(x) lapply(slot(x, "Lines"),
+   function(y) slot(y, "coords")))
+
+uniqueIDs <- NULL
+for(i in 1:length(res)){ #222
+x1 <- res[[i]][[1]][1,1]
+y1<-  res[[i]][[1]][1,2]
+x2 <- res[[i]][[1]][nrow(res[[i]][[1]]),1]
+y2<-  res[[i]][[1]][nrow(res[[i]][[1]]),2]
+xy1 <- paste(trunc(x1),trunc(y1),sep="")
+xy2 <- paste(trunc(x2),trunc(y2),sep="")
+uniqueIDs <- rbind(uniqueIDs, xy1, xy2)
+}#222
+uni_IDs <- unique(uniqueIDs)
+
+#----------------------------
+road_Network_Database <- NULL
+#--------------------------------------
+for(i in 1:length(res)){	#9999
+
+	x1 <- res[[i]][[1]][1,1]
+	y1<-  res[[i]][[1]][1,2]
+
+	x2 <- res[[i]][[1]][nrow(res[[i]][[1]]),1]
+	y2<-  res[[i]][[1]][nrow(res[[i]][[1]]),2]
+
+	xy1 <- paste(trunc(x1),trunc(y1),sep="")
+	xy2 <- paste(trunc(x2),trunc(y2),sep="")
+	
+	road_Network_Database <- rbind(road_Network_Database, cbind(i,  which(uni_IDs[,1]== xy1), which(uni_IDs[,1]== xy2)))
+	
+} #9999
+
+road_Network_Database <- data.frame(road_Network_Database)
+colnames(road_Network_Database) <- c("id", "Start_Node", "End_Node")
+head(road_Network_Database)
+#The above node connections can be examined graphically from the encircled part of Figure 2.
+```
+<br />
+```{r}
+#Specify the number of adjacency order to generate
+NumOrder <- 3
+#create an empty matrix (array) to store the result
+adj_Matrix_SS <- NULL
+
+for(hy in 1: NumOrder){#6666666666  hy<-1
+#-----------------------------------------------------------
+order_A <- hy #
+#-----------------------------------------------------------
+#generating adjacency matrix....
+start_id <- as.matrix(road_Network_Database$Start_Node)
+end_id <- as.matrix(road_Network_Database$End_Node)
+link_ID <- as.matrix(road_Network_Database$id)
+link_adj <- as.data.frame(cbind(start_id, end_id, link_ID))
+
+g <- graph.data.frame(link_adj, directed=FALSE)
+E(g)$weight <- as.matrix(link_adj$V3)
+
+#list of vertex of the original graph
+list_Vertex <- as.data.frame(vertex.attributes(g))
+
+#create adjacency matrix of difference orders
+order_Matrix <- matrix(0, ecount(g), ecount(g))
+colnames(order_Matrix) <- as.vector(edge.attributes(g)[[1]])
+rownames(order_Matrix) <- as.vector(edge.attributes(g)[[1]])
+
+#----------------------------------------------------------------------------
+#going through all segments and picking one after the other..
+for(i in 1:nrow(link_adj)){#8888
+
+    subg <- graph.neighborhood(
+    subgraph.edges(g, eids = which(E(g)$weight == edge.attributes(g)[[1]][i]) ), 
+    order = 1)
+
+    ref_segment <- as.vector(edge.attributes(subg[[1]])[1])[[1]] #check
+#-------------------------------------------------------------------
+for(k in 1:order_A){#000
+
+    subg_g3 <- graph.neighborhood(
+    subgraph.edges(g, eids = which(E(g)$weight %in% ref_segment) ), 
+    order = 1)
+#------------------------------------------------------------------ 
+combined_Nodes <- NULL
+	for(m in 1:length(subg_g3)){#777
+		combined_Nodes <- c(combined_Nodes, as.vector(vertex.attributes(subg_g3[[m]])[1])[[1]])
+	}#777
+combined_Nodes <- unique(combined_Nodes)
+	
+	list_Nodes <- which(as.vector(as.matrix(list_Vertex))%in% combined_Nodes )   #the warning is coming from HERE!!!!
+	
+	#all nodes that are incident on this reference link..
+	g4  <-  subgraph.edges(g, E(g)[inc(V(g)[list_Nodes])] )
+	list_Edges3 <- get.edge.attribute(g4, "weight")
+
+	ref_segment  <- list_Edges3
+
+	  }#000	
+
+	#}#888
+
+#populating the adjacency matrices 
+		for(p in 1:length(list_Edges3)){#444
+			order_Matrix[i, which(colnames(order_Matrix)== list_Edges3[p])] <- 1
+		}#444
+}#8888
+
+diag(order_Matrix) <- 0  
+
+adj_Matrix_SS <- abind(adj_Matrix_SS, order_Matrix, along=3) 
+
+flush.console()
+print(paste("order", hy, "adjacency matrix completed!")) #
+
+ }#6666666666666
+
+#
+#finalising....
+if(hy > 1){
+final_adj_Matrix_SS <- adj_Matrix_SS[,,1]
+for(k in 2:dim(adj_Matrix_SS)[3]){ 
+   subt_matrix <- adj_Matrix_SS[,,k] - adj_Matrix_SS[,,(k-1)]
+    final_adj_Matrix_SS <- abind(final_adj_Matrix_SS, subt_matrix, along=3) 
+  }
+}
+
+```
+In the above example, we chose to generate the first three adjacency orders of the network. Let us now preview the results for the first eight segments as encircled in Figure 2.
+
+```{r}
+#Preview of the 1st-order connectivity of the first eight segments 
+final_adj_Matrix_SS[1:8, 1:8, 1]
+#Preview of the 2nd-order connectivity of the first eight segments 
+final_adj_Matrix_SS[1:8, 1:8, 2]
+#Preview of the 3rd-order connectivity of the first eight segments 
+final_adj_Matrix_SS[1:8, 1:8, 3]
+```
+
+```{r warning=F}
+#saving the final matrix (array)
+save(final_adj_Matrix_SS, file="final_adj_Matrix_SS.RData")
+```
+
