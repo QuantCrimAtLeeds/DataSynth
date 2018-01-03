@@ -90,7 +90,7 @@ r = readRDS("extdata/synthetic_Count.rds")
 knitr::kable(r[c(1:4)], full_width = F, align=c(rep('c',times=2)), caption = "Table 1. Number of records for the synthetic datasets")
 ```
 
-Click the [here](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/datasets/synthetic%20datasets/) to download any of the datasets.
+Click [here](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynthUsingR/datasets/synthetic%20datasets/) to download any of the datasets.
 
 **3D Visualisation of the real and the synthetic datasets**
 
