@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 # Objective
 
-This paper describes the simulation study generating 'synthetic' crime datasets, based on the movement models of optimal foraging animals. At the core of this simulation study is the idea of Levy's walk (Levy, 1925; Viswanathan et al., 1999), which comprises of short sequential random movements and occasionally, long transitions by an object, thereby generating point patterns, such as shown in Fig. 1.
+This paper describes the simulation study generating 'synthetic' crime datasets, based on the movement models of optimal foraging animals. At the core of this simulation study is the idea of Levy's walk (Viswanathan, et al., 1999), which comprises of short sequential random movements and occasionally, long transitions by an object, thereby generating point patterns, such as shown in Fig. 1.
 
 ```{r, fig.cap="Fig. 1: Levy's walk Model", fig.align="center", out.width = '60%'}
 knitr::include_graphics("fig/levy walk.png")
@@ -34,7 +34,7 @@ The goal of this study is to employ the Levy's walk model to simulate the moveme
 
 ## The real crime datasets
 
-The real crime dataset used here is the South Chicago burglary crime incidents, downloaded from the official website of Chicago City. The dataset consist of 2,163 records of burglary incidents that occurred in 2015. See Fig. 2 for the spatial distribution of the crime dataset.
+The real crime dataset used here is the South Chicago burglary crime incidents, [downloaded](https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2) from the official website of Chicago City. The dataset consist of 2,163 records of burglary incidents that occurred in 2015. See Fig. 2 for the spatial distribution of the crime dataset.
 
 ```{r, fig.cap="Fig. 2: The spatial distribution of 2015 real burglary crimes of South Chicago", fig.align="center"}
 knitr::include_graphics("fig/spatial-distr-real-data.png")
@@ -42,9 +42,9 @@ knitr::include_graphics("fig/spatial-distr-real-data.png")
 
 # Criminological background
 
-Drawing ideas from the field of animal ecology, criminologists have likened the re-offending behaviours of certain criminals to the foraging behaviours in animals in order to explain the repeat patterns in crime (Johnson and Bowers, 2004; Felson, 2006). Much like foraging animals, some offenders tend to re-victimise the same location (or areas around the previously victimised location) if the potential gains outweigh the risk of being arrested, thereby producing similar point distribution as that of a foraging animal. Although, the decision-making in human offenders is more deliberate than that of animals and therefore, likely to inform repeats over longer time scales, as compared to multiple 'jumps' per day in foraging animals. It is therefore, reasonable to consider sequential decision-making that extends over a number of days for human offenders rather than within the same day. The resultants of these movements are the concentration of incidents such as crime, and in the case of an offender, in terms of space and time. 
+Drawing ideas from the field of animal ecology, criminologists have likened the re-offending behaviours of certain criminals to the foraging behaviours in animals in order to explain the repeat patterns in crime (Johnson, 2014). Much like foraging animals, some offenders tend to re-victimise the same location (or areas around the previously victimised location) if the potential gains outweigh the risk of being arrested, thereby producing similar point distribution as that of a foraging animal. Although, the decision-making in human offenders is more deliberate than that of animals and therefore, likely to inform repeats over longer time scales, as compared to multiple 'jumps' per day in foraging animals. It is therefore, reasonable to consider sequential decision-making that extends over a number of days for human offenders rather than within the same day. The resultants of these movements are the concentration of incidents such as crime, and in the case of an offender, in terms of space and time. 
 
-Many phenomena relating to crime datasets can be understood by studying the spatial, temporal and spatiotemporal patterns of crime datasets. For example, the repeat victimisation behaviours of offenders have been widely studied by revealing the spatiotemporal patterns inherent in the crime datasets of a given area (Bowers and Johnson, 2004). This study, therefore, focuses on producing synthetic datasets of similar spatial, temporal and spatiotemporal patterns as the real crime datasets.
+Many phenomena relating to crime datasets can be understood by studying the spatial, temporal and spatiotemporal patterns of crime datasets. For example, the repeat victimisation behaviours of burglers have been widely studied by revealing the spatiotemporal patterns inherent in the crime datasets of a given area (Bowers and Johnson, 2005). This study, therefore, focuses on producing synthetic datasets of similar spatial, temporal and spatiotemporal patterns as the real crime datasets.
 
 # The model's calibration
 
@@ -58,7 +58,7 @@ The movement model used (i.e. Levy's walk) requires two main parameters in order
 knitr::include_graphics("fig/landuse.png")
 ```
 
-**The perceptual range (K)** of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996; Powell, 2000). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.
+**The perceptual range (K)** of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.
 
 In this study, a list of the values of K is created in order to synthetise different spatial point distributions. For each simulation, it is assumed that all the offenders have the same perceptual range; an assumption that is unlikely to be true in real life.
 
@@ -75,6 +75,35 @@ For the purpose of this study, the repeat pattern profiles of the real dataset a
 **(c) Random pattern:** where the patterns cannot be described in terms of the above two patterns.
 
 For an idea scenario (that is, where all the repeat victimisations occur at exact same location), the first two patterns described above, will be clearly visible. However, due the fact that the most common offending patterns are 'near-repeats' (a situation where the next crime happens close to the location of the initial crime), the space and the time components start to interact. Consequently, it is unlikely to have a perfectly defined cyclic or high 'short-interval' pattern, especially at very large spatial values of K.
+
+#Modelling the offenders' movement#
+
+The general model structure for offenders' movement is defined as a latent variable model where an offender switches between discrete (unobserved) movement behaviour states $z=\{{1,.,Z}\}$, where each state comprises a collection of movement between consecutive positions $(X_{t-1}, Y_{t-1})$ and $(X_t, Y_t)$ for each time step $t=1,...T$. The set of M states can include "exploratory" movements that are not associated with any particular location, or directed movements toward particular locations. For easy modelling, we follow Morales et al., (2004) by selecting a Weibull distribution for the step length $(s_t)$ and a wrapped $(w)$ Cauchy distribution for the direction $\emptyset_t$ of movement. The movement process model is therefore, a discrete-time, continuous space, multi-state random walk (RW) with step length $[s_t|z_t=i]\sim Weibull(a_i,b_i)$ and direction $[\emptyset_t|Z_t=i]\sim wCauchy(\mu_i, \rho_i)$. Then, we have the following probability density function:
+
+$$f(s_t|z_t=i) =\frac{b_i}{a_i}\begin{pmatrix}
+s_t\\a_i \end{pmatrix}^{b_i-1}exp[-(s_t/a_i)^b_i]
+$$
+and 
+
+$$f(\emptyset_t|z_t=i)=\frac{1}{2\pi}\frac{1-p^2_i}{p^2_i-2\rho_icos(\emptyset_t-\mu_i)} $$
+For $a_z>0$, $b_z>0$, $0\le\emptyset_t <2\pi,$, $0\le \mu_z<2\pi$, $-1<\rho_z<1$, and $z=1,....,M$. Assuming independence between step length and direction within each movement behaviour state, the joint likelihood for$s_t$ and $\emptyset_t$, conditioned on teh latent state variable $z_t$, is
+$$P(s, \emptyset|z)= \prod_{t=1}^{T} f(s_t|z_t, b_{I_t})f(\emptyset_t|z_t)$$
+In order to switch between movement behaviour states, a categorical distribution is assigned to the latent state variable $z_t$. In its simplest form, every time step may be assigned to a movement behaviour state independent of previous state: 
+
+$$z_t \sim Categorical(\Psi_i,.....,\Psi_z)$$
+Such that $\Psi_i=Pr(z_t=i)$, where $\Psi$ is the fixed probability of being in state $i$ at time $t$, and $\sum^Z_{i=1}\Psi_i=1$. More realistically, a memory can be incorporated into the state using first-order Markov transition matrix to characterise the switches (Blackwell, 2003). For the first-order Markov process, 
+
+$$[z_t|z_{t-1}=k] \sim Categorical(\Psi_{k,i},....,\Psi_{k,z})$$
+And $\Psi=Pr(Z_t=i|{t-1=k)}$, for $k=1,....,Z$ where $\Psi_{k,i}$ is the probability of switching from state $k$ at time $t-1$ to state $i$ at time $t$, and $\sum^Z_{i=1}\Psi_{k,i}=1$    
+
+The notion of correlated (biased) walk (CRW) can also be defined. A correlated movement states indicate that a walker exhibits attraction (or aversion) to particular locations (Morales et al., 2004). This can also be incorporated into the movement model formulated. However, if there is a bias towards certain 'centre of attraction' (e.g. certain roads), the successive movement towards such locations would be correlated. Then we have:
+
+$$[\emptyset_t|\emptyset_{t-1},z_t=i] \sim wCauchy(\lambda_{i,t},\rho_i)$$
+
+Where $\emptyset_0$ is the (latent) movement direction prior to time step $t=1$. The expected movement direction $\lambda_{z,t}$ is a weighted average of the strength of bias in the direction of the current centre of attraction $(\mu_{z,t})$ and the previous movement direction $(\emptyset_{t-1})$ for $0 \le \eta_z \le 2 \pi$. If $\eta_z=0$, then movements reverts back to a standard biased random walk. If $\eta_z=1$, then movement becomes an unbiased correlated random walk. If $\rho_i=0$, then movement is a simple (i.e., unbiased and uncorrelated) random walk. If $\rho_i=1$, then movement is biased and deterministic (Barton et al., 2009). In our application to modelling offender's movement, two state random walks are defined, namely; (1) exploratory - indicating a mere exploration of the environment to identify suitable target, and (2) offending - indicating the state at which an offender is motivated to commit an offence. 
+
+One additional parameter - perceptual range, K - must also be considered in relation to foraging pattern within a heterogeneous environment. Perceptual range denoted how the offender perceives the environment in order to make its movement decisions (Lima and Zollner, 1996). During simulations, at each step, the turning angles of the individuals will be biased towards lower resistance areas, and this is evaluated only within the radius of the perceptual range. An individual with a wider perceptual range will be attracted to lower resistance areas, even if it has to cross high resistance areas, because it 'sees' farther. On the contrary, an individual with a small perceptual range will not 'see' those lower resistance areas, so it will be restricted by high resistance areas. This can be implemented by restricting an individual's movement within a circle. 
+
 
 #The real and the synthetic datasets
 
@@ -96,11 +125,19 @@ Click [here](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataSynth
 
 In Fig. 4, the left plot shows the 3D point distribution of the real dataset, while the right plot shows the 3D point distribution of one of the synthetic data (i.e. cyclic temporal pattern with spatial bandwidth of 200m). 
 
+<!-- #3D Plotting code -->
 <!-- ```{r} -->
 <!-- library(plot3D) -->
+<!-- library(rgdal) -->
 <!-- library(rgl) -->
 <!-- library(rgeos) -->
 <!-- library(raster) -->
+
+<!-- #import the road network -->
+<!-- road_Network <- readOGR(dsn=".", "utm_SS_shp") #in projected coordinate system..plot(road_Network) -->
+
+<!-- #converting x,y coord. to spatia point  -->
+<!-- crimes_shape <- SpatialPointsDataFrame(syn_Crime[,8:9], syn_Crime, proj4string = coord_Sys)  #X_shape@data -->
 
 <!-- plot3d(crimes_shape@data$x, crimes_shape@data$y,  -->
 <!-- 	((as.numeric(crimes_shape@data$date)- min(as.numeric(crimes_shape@data$date)))*100),  -->
@@ -116,6 +153,8 @@ out.width = '100%'
 knitr::include_graphics("fig/3D_plots.png")
 ```
 
+Click [here](https://github.com/QuantCrimAtLeeds/DataSynth/tree/master/DataSynthUsingR/other%20codes) for the plotting code. 
+
 Comment: The most noticeable difference between the two plot is that the point distribution is denser in the south-east corner and the north-west corner of the study area, for the real dataset and the simulated dataset, respectively.
 
 
@@ -125,181 +164,60 @@ Fig. 5 and Fig. 6 show the results of the spatial exploration of both the real a
 
 $$K(r)=\frac{a}{n(n-1)}\sum_{i}\sum_{j}\ I(d_{ij} \le r)e_{ij}$$
 Where $a$ is the area of the window (i.e. K), $n$ is the number of data points, and the sum is taken over all ordered pairs of points $i$ and $j$. Here, $d_{ij}$ is the distance between the two points, and $I(d_{ij}\le r)$ is the indicator that equals 1 if the distance is less than or equal to $r$. The term $e_{ij}$ is the edge correction weight. The Ripley's isotropic correction (Ripley, 1988) is used for the edge correction. 
-Fig. 5 shows the results of K-test with the Complete Spatial Randomness (CRS) - otherwise referred to as the homogeneous Poisson process - as the underlying theoretical distribution. Fig. 5 shows that the observed estimates (solid black lines) lie well outside the envelopes that define the distribution of 99 simulated theoretical distributions. The CSR assumes that the risk intensity is uniform across the space. Thus, these results imply that the real dataset is significantly clustered than would be expected on the basis of chance; results which seem reasonable considering the clustering of the datasets (inspected visually). The assumption of CSR as the theoretical (baseline) distribution has been widely criticised for its lack of consideration for the dynamism of the underlying risk intensities of geographical point processes in general (Diggle, 2003). Click here to see the code for the K-test
 
+Fig. 5 shows the results of K-test with the Complete Spatial Randomness (CRS) - otherwise referred to as the homogeneous Poisson process - as the underlying theoretical distribution. Fig. 5 shows that the observed estimates (solid black lines) lie well outside the envelopes that define the distribution of 99 simulated theoretical distributions. The CSR assumes that the risk intensity is uniform across the space. Thus, these results imply that the real dataset is significantly clustered than would be expected on the basis of chance; results which seem reasonable considering the clustering of the datasets (inspected visually). The assumption of CSR as the theoretical (baseline) distribution has been widely criticised for its lack of consideration for the dynamism of the underlying risk intensities of geographical point processes in general (Diggle, 2003). 
 
- 
+```{r, fig.cap="Fig. 5. The Ripley's K estimates for the real and synthetic datasets, using the CSR as the theoretical distribution. The black (solid) lines represent the observed estimates. The red (dotted) lines represent the mean simulated estimates, bounded by the maximum and the minimum simulated estimates, across all distances.", fig.align="center"}
+out.width = '100%'
+knitr::include_graphics("fig/RipleyK_homog.png")
+```
+In reality, we expect the underlying intensity of a point process, such as crime, to vary across space, due to the heterogeneous nature of the urban environment. For example, risk of offending may vary in localised regions as a function of the land use or the local population density of the regions. This spatial structure may take many forms, from simple linear gradient to more complex structuring. When the theoretical distribution is defined so as to capture these underlying structures, we have an inhomogeneous Poisson process (Diggle, 2003).  
 
+In Fig. 6, the theoretical distribution envelopes are now defined as an inhomogeneous Poisson process by fitting a Gaussian density model to the original datasets. This however, violates the symmetry principle that is essential to the validity of simulation envelopes; which requires that both the observed and simulated patterns be subjected to the same method of intensity estimation. This approach is however, used here for convenience. 
 
-The codes written to generate the synthetic dataset can be found here [link]. 
+For the real datasets, the Gaussian densities are modelled using different values of spatial bandwidths (i.e. 200m, 400m, .., 1000m). For the simulated datasets, the Gaussian densities are modelled by setting the K value that was originally used to generate the data at the spatial bandwidths.
 
-
-
-
-
-#```{r}
-##knitr::kable(synthetic_Count[1:4], caption = "Characteristics of OSM route network data for case study cities.")
-#```
-
-
-
-
-
-Data were accessed from the following sources:
-
-- Transport network and building data from **OpenStreetMap (OSM)**, an open access, freely available, crowd-sourced online mapping database [@barrington-leigh_worlds_2017].
-- Population density and some demographic data from [worldpop](http://www.worldpop.org.uk/) [@tatem_worldpop_2017]
-<!-- - Topographic data from NASA's open SRTM data -->
-
-<!-- Additional data on population densities will be obtained from WorldPop and from NASA's Socioeconomic Data and Applications Center (SDAC). The -->
-<!-- former provides static fine-resolution data (100$m^2$, for the year 2013 only), while the latter provides coarser (1$km^2$) future projections -->
-<!-- out to 2020. -->
-
-# Methods
-
-We have made a number of technical breakthroughs that allow us to estimate cycling potential down to the road network level based on open data.
-This involved implementing a highly computationally efficient routing algorithm in C++.
-Since commencing the project we have developed a method for re-allocating the results of the routing algorithm back onto the road network.
-A custom level of road segmentation was developed to create this geographical aggregated flow map, which clearly shows routes with high cycling potential ([see interactive version](http://rpubs.com/RobinLovelace/341996)):
-
-
-#```{r, echo=FALSE, fig.cap="Illustration of interactive map demonstrating the preliminary results: the routes in Accra with highest cycling potential."}
-#knitr::include_graphics("fig/accra-flow1-interactive.png")
-#```
-
-# City overviews
-
-This section provides a high-level overview about the geography of each city as it relates to active travel potential.
-Both cities are included in this section, laying the ground for the next two sections which provide detailed results for Accra and then Kathmandu.
-Comparing the cities at the outset will help put the results in perspective and lay the foundation for a discussion of how a tool building on this work could be useful to different stakeholders in each city.
-
-Accra is the larger city, with a population approaching 5 million and a growth rate of around 3% per year in the Greater Accra Region according to the [Ghana Statistical Service](http://www.statsghana.gov.gh/docfiles/2010phc/Projected%20population%20by%20sex%202010%20-%202016.pdf).
-Kathmandu has a population of just over 1.2 million, according to the [World Population Review](http://worldpopulationreview.com/world-cities/kathmandu-population/).
-
-We already have some results from the OSM and demographic datasets, as outlined below.
-
-\newpage
-
-## OpenStreetMap data
-
-The OpenStreetMap network for Accra has 145,827 street segments connecting
-131,349 distinct points, and extends over 4,072km. The OSM data also include
-24,490 buildings, of which 23,102 include geometric descriptions only, while the
-remaining 1,388 buildings are divided between 28 distinct categories.
-
-The equivalent network for Kathmandu has 79,832 street segments connecting
-37,770 distinct points, and extends over 1,062km. The OSM data also include 82,333
-buildings of which 75,778 include geometric descriptions only, while the
-remaining 6,555 are divided between 344 distinct categories (in this case
-including many named buildings).
-
-```{r, echo=FALSE}
-r = readRDS("extdata/r.rds")
-names(r) = c("City", "Street nodes", "Street segments", "Network distance (km)", "Population (on network)", "N. Buildings", "nb_no_desc", "Num. Building Classes")
-knitr::kable(r[c(1, 5, 6, 8)], caption = "Basic OSM characteristics of case study cities")
+```{r, fig.cap="Fig. 6: The Ripley's K estimates for the real datasets; using the Inhomogeneous Poisson model (with varying bandwidths) to define the theoretical distribution. The black (solid) lines represent the observed estimates. The red (dotted) lines represent the mean simulated estimates, bounded by the maximum and the minimum simulated estimates, across all distances.", fig.align="center"}
+out.width = '100%'
+knitr::include_graphics("fig/RipleyK_inhomo.png")
 ```
 
+Compared to Fig. 5, we can see that both the observed and the Inhomogeneous Poisson model (Gaussian densities) appear closer to one another. For the real dataset, both models appear to describe each other better, at spatial bandwidths of 200m, 400m and 600m, while diverging at bandwidths of 800m and 1000m. For the simulated datasets, the theoretical estimates only appear to describe the observed estimates when K and r are similar. For example, at K=400m, both estimates appear to coincide at around r=400m and 600m, for all three synthetic datasets. However, both patterns start to diverge very significantly at larger values of K. This explains the fact that as the perceptual range increases, the spatial coverages of the offenders begin to overlap and the spatial distribution of the crimes may not be well-defined anymore. `Click here to see the code for the K-test`
 
-The street network for Accra is more extensive, reflecting the greater spatial
-extent of the city, while data on buildings are considerable more detailed for
-Kathmandu than for Accra, presumably reflecting extensive humanitarian mapping
-activity in response to the 2015 earthquake.
+#Exploration of temporal patterns#
 
-```{r}
-knitr::kable(r[1:4], caption = "Characteristics of OSM route network data for case study cities.")
+Fig. 7 shows the repeat pattern profiles of both the real dataset and the synthetic datasets, estimated at 1-day temporal lag distances up to 60 days. The profiles can be used to describe the temporal interactions within the datasets. In order to eliminate the edge effects, the last 60 days of the datasets are adjusted to compensate for the crime counts at longer temporal lag distances. The final crime counts are then standardised using the number of eligible cells of the reference date. The profiles are generated at different spatial bandwidths/perceptual ranges, as shown in Fig. 7. 
+
+
+```{r, fig.cap="Fig. 7: Repeat pattern profiles of the real dataset and the synthetic datasets", fig.align="center"}
+out.width = '100%'
+knitr::include_graphics("fig/Repeat_pattern_Profile.png")
 ```
 
+From Fig. 7, the temporal patterns of the real dataset are less well-defined, as compared to the synthetic datasets. This is due to the fact that the synthesised offenders are assumed to be operating at a uniform perceptual range (spatial bandwidth) and that their temporal patterns are similar. The temporal patterns at smaller spatial ranges (bandwidths), such as 0-200m, are able to explain these two assumptions, since there is less intermingling of the activities of different offenders. At larger bandwidths, however, the spatial and temporal distribution of the crime points start to interact, giving rise to spatiotemporal interactions. In conclusion, we can say that the real dataset does not appear to be well-defined, primarily because the assumption of the uniform perceptual range (K) does not hold. 
 
-## Demographic data
-
-Demographic data for Accra from worldpop include population density estimates
-at 172,238 points, corresponding to estimates in roughly 30-by-30m grid cells.
-Estimates are available for total population density, as well as distributed
-between 14 5-year age classes from 0-5 years up to 60-65 years, and 65+ years.
-
-Demographic data for Kathmandu are not as detailed, and also do not include age
-classes.
-
-## An overview of Accra from an active travel perspective
-
-<!-- Monsuru (1 day's work) -->
-<!-- This section will provide background information on the following topics: -->
-
-<!-- - Institutions working in transport and their aims -->
-<!-- - References about the transport system in Accra -->
-<!-- - Photos of current set-up -->
-<!-- - What is the current modal split? -->
-<!-- - Recent transport policies. -->
-<!-- - How well developed are other infrastructures (e.g. sewerage.) -->
-
-
-
-### Greater Accra Metropolitan Area (GAMA)
-
-The Greater Accra Metropolitan Area, simply referred to as Accra city, is the smallest geographical region of Ghana’s 10 administrative regions, covering only 1.4 percent of the total land area of Ghana (see Fig. xx). It is the second most populous region, after the Ashanti region. According to the Ghana Statistical Service, Accra city’s population is estimated to be approaching 5 million, with a growth rate of around 3% per year. Fifty six percent of the population is estimated to be under 24 years of age, with fifty-one percent (51%) of the population being females, and the remaining 49% males, giving a male-to-female ratio of 1:1.04. 
-
-#```{r, fig.cap="Geographical location of Greater Accra Metropolitan Area (GAMA)"}
-#knitr::include_graphics("fig/study-area-accra.png")
-#```
-
+#Exploration of spatiotemporal interactions#
  
-Accra city comprises 10 of the 216 local authority districts of the Republic of Ghana. Administratively, the Accra Metropolitan local authority district serves as the capital of Accra city, and is administered by Accra Metropolitan Assembly, which is the political and administrative authority for the entire Accra city. 
+#The R-codes for simulating the synthetic data#
 
 
+#References#
 
-[@quarshie_integrating_2007]
+Bowers, K.J. and Johnson, S.D., 2005. Domestic burglary repeats and space-time clusters: The dimensions of risk. European Journal of Criminology, 2(1), pp.67-92.
 
+Farrell, G. and Pease, K., 1993. Once bitten, twice bitten: Repeat victimisation and its implications for crime prevention. � Crown Copyright.
 
-## An overview of Kathmandu from an active travel perspective
+Johnson, S.D., 2014. How do offenders choose where to offend? Perspectives from animal foraging. Legal and Criminological Psychology, 19(2), pp.193-210
 
-This section will provide background information on the following topics:
+Johnson, S.D., Bowers, K. and Hirschfield, A., 1997. New insights into the spatial and temporal distribution of repeat victimization. The British Journal of Criminology, 37(2), pp.224-241.
 
-- Institutions working in transport and their aims
-- References about the transport system in Accra
-- Photos of current set-up
-- What is the current modal split?
-- Recent transport policies.
-- How well developed are other infrastructures (e.g. sewerage.)
+Lima, S.L. and Zollner, P.A., 1996. Towards a behavioral ecology of ecological landscapes. Trends in Ecology & Evolution, 11(3), pp.131-135.
 
-# Results I: Accra
+Morales, J.M., Haydon, D.T., Frair, J., Holsinger, K.E. and Fryxell, J.M., 2004. Extracting more out of relocation data: building movement models as mixtures of random walks. Ecology, 85(9), pp.2436-2445.
 
-This section is work in progress.
-We will explore how well the OSM road network illustrated in the map below represents the true state of the transport system.
+Ripley, B.D., 1988. Statistical inference for spatial processes. Cambridge university press.
 
-#```{r, fig.cap="Overview of Accra (left) and initial results of cycling potential (right).", fig.show='hold', out.width="49%"}
-#knitr::include_graphics(c("fig/accra-osm-overview.png", "fig/test.png"))
-#```
+Viswanathan, G.M., Buldyrev, S.V., Havlin, S., Da Luz, M.G.E., Raposo, E.P. and Stanley, H.E., 1999. Optimizing the success of random searches. Nature, 401(6756), pp.911-914. 
 
-We have generated estimates for cycling potential across the larger of the two case study cities. The priority over the next 3 weeks of the project will be to calibrate this model and apply refined versions of it to both cities, using additional input datasets where available.
-
-# Results II: Kathmandu
-
-This section is work in progress.
-
-# Validation and calibration
-
-This section is work in progress.
-
-# Discussion
-
-This section is work in progress.
-
-## Policy relevance of results
-
-<!-- To what extent has this deliverable (from phase 1) been delivered? -->
-<!-- **Deliverables:** This phase will provide clean datasets and summary information about the 'data landscape' of each case study city. -->
-<!-- This will relate primarily to population density, trip attractors and transport infrastructure from which to -->
-<!-- We will also deliver summaries of the relationships between demographic and transport infrastructure data and an assessment of the quality of local data and priorities for future data collection. -->
-<!-- The deliverables will be provided in the form of datasets provided to the WHO and interactive and high quality maps. -->
-
-## The potential uses of an online toolkit
-
-# Next steps
-
-This section is work in progress.
-
-# References
-
-<!-- Anything else to consider here guys? -->
 
 
