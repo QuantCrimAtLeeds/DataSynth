@@ -11,26 +11,22 @@ output:
     number_sections: yes
 ---
 
-<!-- Note: this is where I'm adding the write-up for now for maximum visibility.
-Can go elsewhere, e.g. as a vignette before this is open sourced. -->
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
-  out.width = "60%",
+  #out.width = "60%",
   collapse = TRUE,
   comment = "#>",
   fig.path = "README-",
   echo = FALSE
 )
-# add citation
-# citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "~/allrefs.bib", file = "who.bib")
 ```
 
 # Objective
 
 This paper describes the simulation study generating 'synthetic' crime datasets, based on the movement models of optimal foraging animals. At the core of this simulation study is the idea of Levy's walk (Levy, 1925; Viswanathan et al., 1999), which comprises of short sequential random movements and occasionally, long transitions by an object, thereby generating point patterns, such as shown in Fig. 1.
 
-```{r, fig.cap="Fig. 1: Levy's walk Model", fig.align="center"}
+```{r, fig.cap="Fig. 1: Levy's walk Model", fig.align="center", out.width = '60%'}
 knitr::include_graphics("fig/levy walk.png")
 ```
 
@@ -98,7 +94,7 @@ Click the [here](https://github.com/QuantCrimAtLeeds/DataSynth/blob/master/DataS
 
 **3D Visualisation of the real and the synthetic datasets**
 
-In Fig. 3, the left plot shows the 3D point distribution of the real dataset, while the right plot shows the 3D point distribution of one of the synthetic data (i.e. cyclic temporal pattern with spatial bandwidth of 200m). 
+In Fig. 4, the left plot shows the 3D point distribution of the real dataset, while the right plot shows the 3D point distribution of one of the synthetic data (i.e. cyclic temporal pattern with spatial bandwidth of 200m). 
 
 <!-- ```{r} -->
 <!-- library(plot3D) -->
@@ -115,7 +111,21 @@ In Fig. 3, the left plot shows the 3D point distribution of the real dataset, wh
 
 <!-- ``` -->
 
+```{r, fig.cap="Fig. 4: 3D visualisation of the datasets", fig.align="center"}
+out.width = '100%'
+knitr::include_graphics("fig/3D_plots.png")
+```
 
+Comment: The most noticeable difference between the two plot is that the point distribution is denser in the south-east corner and the north-west corner of the study area, for the real dataset and the simulated dataset, respectively.
+
+
+#Exploration of spatial patterns
+
+Fig. 5 and Fig. 6 show the results of the spatial exploration of both the real and the synthetic datasets. Ripley's K test implemented as the Kest function in `spatstat` R package can be used. Generally referred to as the K-test, the estimate is the reduced second moment function $K(r)$, which examines the level of clustering in a dataset, compared with a theoretical distribution. The estimate of $K(r)$ is of the form,
+
+$$K(r)=\frac{a}{n(n-1)}\sum_{i}\sum_{j}\ I(d_{ij} \le r)e_{ij}$$
+Where $a$ is the area of the window (i.e. K), $n$ is the number of data points, and the sum is taken over all ordered pairs of points $i$ and $j$. Here, $d_{ij}$ is the distance between the two points, and $I(d_{ij}\le r)$ is the indicator that equals 1 if the distance is less than or equal to $r$. The term $e_{ij}$ is the edge correction weight. The Ripley's isotropic correction (Ripley, 1988) is used for the edge correction. 
+Fig. 5 shows the results of K-test with the Complete Spatial Randomness (CRS) - otherwise referred to as the homogeneous Poisson process - as the underlying theoretical distribution. Fig. 5 shows that the observed estimates (solid black lines) lie well outside the envelopes that define the distribution of 99 simulated theoretical distributions. The CSR assumes that the risk intensity is uniform across the space. Thus, these results imply that the real dataset is significantly clustered than would be expected on the basis of chance; results which seem reasonable considering the clustering of the datasets (inspected visually). The assumption of CSR as the theoretical (baseline) distribution has been widely criticised for its lack of consideration for the dynamism of the underlying risk intensities of geographical point processes in general (Diggle, 2003). Click here to see the code for the K-test
 
 
  
