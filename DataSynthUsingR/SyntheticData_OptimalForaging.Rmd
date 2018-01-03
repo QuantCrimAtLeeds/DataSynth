@@ -1,0 +1,249 @@
+---
+title: "Simulation of 'Synthetic' Crime Datasets"
+# output:
+#   md_document:
+#     variant: markdown_github
+author: Monsuru Adepeju
+date: '`r Sys.Date()`'
+#bibliography: who.bib
+output:
+  html_document:
+    number_sections: yes
+---
+
+<!-- Note: this is where I'm adding the write-up for now for maximum visibility.
+Can go elsewhere, e.g. as a vignette before this is open sourced. -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  out.width = "60%",
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-",
+  echo = FALSE
+)
+# add citation
+# citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "~/allrefs.bib", file = "who.bib")
+```
+
+# Objective
+
+This paper describes the simulation study generating 'synthetic' crime datasets, based on the movement models of optimal foraging animals. At the core of this simulation study is the idea of Levy's walk (Levy, 1925; Viswanathan et al., 1999), which comprises of short sequential random movements and occasionally, long transitions by an object, thereby generating point patterns, such as shown in Fig. 1.
+
+```{r, fig.cap="Fig. 1: Levy's walk Model", fig.align="center"}
+knitr::include_graphics("fig/levy walk.png")
+```
+
+The goal of this study is to employ the Levy's walk model to simulate the movements of crime offenders. The primary focus of this study are the spatial, temporal and spatiotemporal characteristics of offenders. The synthetic datasets are then compared with the real datasets using visualisation and statistical techniques, in order to assess how well the simulated datasets describe the real dataset. 
+
+## The real crime datasets
+
+The real crime dataset used here is the South Chicago burglary crime incidents, downloaded from the official website of Chicago City. The dataset consist of 2,163 records of burglary incidents that occurred in 2015. See Fig. 2 for the spatial distribution of the crime dataset.
+
+```{r, fig.cap="Fig. 2: The spatial distribution of 2015 real burglary crimes of South Chicago", fig.align="center"}
+knitr::include_graphics("fig/spatial-distr-real-data.png")
+```
+
+# Criminological background
+
+Drawing ideas from the field of animal ecology, criminologists have likened the re-offending behaviours of certain criminals to the foraging behaviours in animals in order to explain the repeat patterns in crime (Johnson and Bowers, 2004; Felson, 2006). Much like foraging animals, some offenders tend to re-victimise the same location (or areas around the previously victimised location) if the potential gains outweigh the risk of being arrested, thereby producing similar point distribution as that of a foraging animal. Although, the decision-making in human offenders is more deliberate than that of animals and therefore, likely to inform repeats over longer time scales, as compared to multiple 'jumps' per day in foraging animals. It is therefore, reasonable to consider sequential decision-making that extends over a number of days for human offenders rather than within the same day. The resultants of these movements are the concentration of incidents such as crime, and in the case of an offender, in terms of space and time. 
+
+Many phenomena relating to crime datasets can be understood by studying the spatial, temporal and spatiotemporal patterns of crime datasets. For example, the repeat victimisation behaviours of offenders have been widely studied by revealing the spatiotemporal patterns inherent in the crime datasets of a given area (Bowers and Johnson, 2004). This study, therefore, focuses on producing synthetic datasets of similar spatial, temporal and spatiotemporal patterns as the real crime datasets.
+
+# The model's calibration
+
+## Spatial component:
+
+The movement model used (i.e. Levy's walk) requires two main parameters in order to control the spatial distribution of resulting point realisation. These are; (1) the spatial location of offenders' origins, and (2) the perceptual range, K. 
+
+**Offender's origin:** This may be considered as the location where an offender lives, and usually marks the start of every day's journey within the study area. The locations of the residential land use are used to infer the offenders' origins. For the South Chicago area, the origins are chosen amongst the three categories of residential buildings (based on the official classification). Probability values are assigned to each category based on visual inspection.  
+
+```{r, fig.cap="Fig. 3: Residential land use of South Chicago", fig.align="center"}
+knitr::include_graphics("fig/landuse.png")
+```
+
+**The perceptual range (K)** of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996; Powell, 2000). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.
+
+In this study, a list of the values of K is created in order to synthetise different spatial point distributions. For each simulation, it is assumed that all the offenders have the same perceptual range; an assumption that is unlikely to be true in real life.
+
+#The temporal component:
+
+In crime pattern analysis, a common approach for visualising the repeat pattern (Farrel and Pease, 1993) in crime datasets is to draw the repeat pattern profile (Johnson et al., 1997). The profile is drawn by counting the number of crimes that occur at a given temporal lag distance to one another and calculating the sum of the values across the entire study area. Each counting process is carried out inside a spatial range, which may be considered to be the perceptual range (K), according to this study.
+
+For the purpose of this study, the repeat pattern profiles of the real dataset and the synthetic datasets are generated at varying values of K. In order to describe the repeat pattern profiles, three different temporal patterns are formulated. They are:
+
+**(a) Cyclic pattern:** where there appears a visible cyclic pattern in dataset, such as weekly or fortnightly cycles.
+
+**(b) High 'short-interval' pattern:** where there is a prominent level of repeats at short temporal lags, such as on days of the first week or two weeks.  
+
+**(c) Random pattern:** where the patterns cannot be described in terms of the above two patterns.
+
+For an idea scenario (that is, where all the repeat victimisations occur at exact same location), the first two patterns described above, will be clearly visible. However, due the fact that the most common offending patterns are 'near-repeats' (a situation where the next crime happens close to the location of the initial crime), the space and the time components start to interact. Consequently, it is unlikely to have a perfectly defined cyclic or high 'short-interval' pattern, especially at very large spatial values of K.
+
+#The real and the synthetic datasets
+
+The real dataset can be found here: South Chicago burglary 2015 (2,163 records)[]
+
+The following are the generated synthetic datasets (distinguished by the value of K and the associated temporal pattern): 
+
+
+
+
+Data were accessed from the following sources:
+
+- Transport network and building data from **OpenStreetMap (OSM)**, an open access, freely available, crowd-sourced online mapping database [@barrington-leigh_worlds_2017].
+- Population density and some demographic data from [worldpop](http://www.worldpop.org.uk/) [@tatem_worldpop_2017]
+<!-- - Topographic data from NASA's open SRTM data -->
+
+<!-- Additional data on population densities will be obtained from WorldPop and from NASA's Socioeconomic Data and Applications Center (SDAC). The -->
+<!-- former provides static fine-resolution data (100$m^2$, for the year 2013 only), while the latter provides coarser (1$km^2$) future projections -->
+<!-- out to 2020. -->
+
+# Methods
+
+We have made a number of technical breakthroughs that allow us to estimate cycling potential down to the road network level based on open data.
+This involved implementing a highly computationally efficient routing algorithm in C++.
+Since commencing the project we have developed a method for re-allocating the results of the routing algorithm back onto the road network.
+A custom level of road segmentation was developed to create this geographical aggregated flow map, which clearly shows routes with high cycling potential ([see interactive version](http://rpubs.com/RobinLovelace/341996)):
+
+
+#```{r, echo=FALSE, fig.cap="Illustration of interactive map demonstrating the preliminary results: the routes in Accra with highest cycling potential."}
+#knitr::include_graphics("fig/accra-flow1-interactive.png")
+#```
+
+# City overviews
+
+This section provides a high-level overview about the geography of each city as it relates to active travel potential.
+Both cities are included in this section, laying the ground for the next two sections which provide detailed results for Accra and then Kathmandu.
+Comparing the cities at the outset will help put the results in perspective and lay the foundation for a discussion of how a tool building on this work could be useful to different stakeholders in each city.
+
+Accra is the larger city, with a population approaching 5 million and a growth rate of around 3% per year in the Greater Accra Region according to the [Ghana Statistical Service](http://www.statsghana.gov.gh/docfiles/2010phc/Projected%20population%20by%20sex%202010%20-%202016.pdf).
+Kathmandu has a population of just over 1.2 million, according to the [World Population Review](http://worldpopulationreview.com/world-cities/kathmandu-population/).
+
+We already have some results from the OSM and demographic datasets, as outlined below.
+
+\newpage
+
+## OpenStreetMap data
+
+The OpenStreetMap network for Accra has 145,827 street segments connecting
+131,349 distinct points, and extends over 4,072km. The OSM data also include
+24,490 buildings, of which 23,102 include geometric descriptions only, while the
+remaining 1,388 buildings are divided between 28 distinct categories.
+
+The equivalent network for Kathmandu has 79,832 street segments connecting
+37,770 distinct points, and extends over 1,062km. The OSM data also include 82,333
+buildings of which 75,778 include geometric descriptions only, while the
+remaining 6,555 are divided between 344 distinct categories (in this case
+including many named buildings).
+
+```{r, echo=FALSE}
+r = readRDS("extdata/r.rds")
+names(r) = c("City", "Street nodes", "Street segments", "Network distance (km)", "Population (on network)", "N. Buildings", "nb_no_desc", "Num. Building Classes")
+knitr::kable(r[c(1, 5, 6, 8)], caption = "Basic OSM characteristics of case study cities")
+```
+
+
+The street network for Accra is more extensive, reflecting the greater spatial
+extent of the city, while data on buildings are considerable more detailed for
+Kathmandu than for Accra, presumably reflecting extensive humanitarian mapping
+activity in response to the 2015 earthquake.
+
+```{r}
+knitr::kable(r[1:4], caption = "Characteristics of OSM route network data for case study cities.")
+```
+
+
+## Demographic data
+
+Demographic data for Accra from worldpop include population density estimates
+at 172,238 points, corresponding to estimates in roughly 30-by-30m grid cells.
+Estimates are available for total population density, as well as distributed
+between 14 5-year age classes from 0-5 years up to 60-65 years, and 65+ years.
+
+Demographic data for Kathmandu are not as detailed, and also do not include age
+classes.
+
+## An overview of Accra from an active travel perspective
+
+<!-- Monsuru (1 day's work) -->
+<!-- This section will provide background information on the following topics: -->
+
+<!-- - Institutions working in transport and their aims -->
+<!-- - References about the transport system in Accra -->
+<!-- - Photos of current set-up -->
+<!-- - What is the current modal split? -->
+<!-- - Recent transport policies. -->
+<!-- - How well developed are other infrastructures (e.g. sewerage.) -->
+
+
+
+### Greater Accra Metropolitan Area (GAMA)
+
+The Greater Accra Metropolitan Area, simply referred to as Accra city, is the smallest geographical region of Ghana’s 10 administrative regions, covering only 1.4 percent of the total land area of Ghana (see Fig. xx). It is the second most populous region, after the Ashanti region. According to the Ghana Statistical Service, Accra city’s population is estimated to be approaching 5 million, with a growth rate of around 3% per year. Fifty six percent of the population is estimated to be under 24 years of age, with fifty-one percent (51%) of the population being females, and the remaining 49% males, giving a male-to-female ratio of 1:1.04. 
+
+#```{r, fig.cap="Geographical location of Greater Accra Metropolitan Area (GAMA)"}
+#knitr::include_graphics("fig/study-area-accra.png")
+#```
+
+ 
+Accra city comprises 10 of the 216 local authority districts of the Republic of Ghana. Administratively, the Accra Metropolitan local authority district serves as the capital of Accra city, and is administered by Accra Metropolitan Assembly, which is the political and administrative authority for the entire Accra city. 
+
+
+
+[@quarshie_integrating_2007]
+
+
+## An overview of Kathmandu from an active travel perspective
+
+This section will provide background information on the following topics:
+
+- Institutions working in transport and their aims
+- References about the transport system in Accra
+- Photos of current set-up
+- What is the current modal split?
+- Recent transport policies.
+- How well developed are other infrastructures (e.g. sewerage.)
+
+# Results I: Accra
+
+This section is work in progress.
+We will explore how well the OSM road network illustrated in the map below represents the true state of the transport system.
+
+#```{r, fig.cap="Overview of Accra (left) and initial results of cycling potential (right).", fig.show='hold', out.width="49%"}
+#knitr::include_graphics(c("fig/accra-osm-overview.png", "fig/test.png"))
+#```
+
+We have generated estimates for cycling potential across the larger of the two case study cities. The priority over the next 3 weeks of the project will be to calibrate this model and apply refined versions of it to both cities, using additional input datasets where available.
+
+# Results II: Kathmandu
+
+This section is work in progress.
+
+# Validation and calibration
+
+This section is work in progress.
+
+# Discussion
+
+This section is work in progress.
+
+## Policy relevance of results
+
+<!-- To what extent has this deliverable (from phase 1) been delivered? -->
+<!-- **Deliverables:** This phase will provide clean datasets and summary information about the 'data landscape' of each case study city. -->
+<!-- This will relate primarily to population density, trip attractors and transport infrastructure from which to -->
+<!-- We will also deliver summaries of the relationships between demographic and transport infrastructure data and an assessment of the quality of local data and priorities for future data collection. -->
+<!-- The deliverables will be provided in the form of datasets provided to the WHO and interactive and high quality maps. -->
+
+## The potential uses of an online toolkit
+
+# Next steps
+
+This section is work in progress.
+
+# References
+
+<!-- Anything else to consider here guys? -->
+
+
