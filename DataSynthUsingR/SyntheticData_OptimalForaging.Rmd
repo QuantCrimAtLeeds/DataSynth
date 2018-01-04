@@ -112,6 +112,13 @@ One additional parameter - perceptual range, K - must also be considered in rela
 
 [South Chicago burglary 2015 (2,163 records)](https://github.com/QuantCrimAtLeeds/DataSynth/tree/master/DataSynthUsingR/datasets/real%20dataset])
 
+**Previewing the dataset**
+
+```{r, echo=FALSE}
+dat = read.table(file="datasets/real dataset/chicago_2015_dataset.csv", sep=",", head=TRUE)
+head(dat)
+```
+
 The following table shows the number of record in each synthetic datasets generated (distinguished by the value of K and the associated temporal pattern): 
 
 ```{r, echo=FALSE}
@@ -200,6 +207,241 @@ From Fig. 7, the temporal patterns of the real dataset are less well-defined, as
  
 #The R-codes for simulating the synthetic data#
 
+```{r include = FALSE}
+library(rgdal)
+library(rgl)
+library(sp)
+library(rgeos)
+library(raster)
+library(maptools)
+library(SiMRiv)
+
+```
+
+```{r, echo=FALSE}
+
+#importing the land use data
+offenders_Origin <- readShapeSpatial('shapefiles/all_landuse_SS_UTM.shp')
+proj4string(offenders_Origin) <- "+proj=utm +zone=16 +ellps=clrk66 +units=m +no_defs" # specify projection
+#plot(landuse)
+
+
+#plotting the landuse map
+colPallete<-c("green","blue","yellow","grey")
+landuseColors <- colPallete[offenders_Origin$col_ID]
+plot(offenders_Origin, col=landuseColors) 
+leg.txt <-c("l1", "l2", "l3", "l4")
+legend("right",   # location of legend
+	legend=unique(offenders_Origin$col_ID), # categories or elements to render in 
+             # the legend
+      fill=colPallete) # color pa
+
+#extracting the centroid coordinates of the three residential buildings categories
+res_SF_Det <- offenders_Origin[which(offenders_Origin$col_ID==1),]
+res_SF_Det <- cbind(res_SF_Det$ID, as.data.frame(res_SF_Det$x), as.data.frame(res_SF_Det$y))
+colnames(res_SF_Det) <-  c("ID","x","y")
+
+res_SF_Att <- offenders_Origin[which(offenders_Origin$col_ID==2),]
+res_SF_Att <- cbind(res_SF_Att$ID, as.data.frame(res_SF_Att$x), as.data.frame(res_SF_Att$y))
+colnames(res_SF_Att) <-  c("ID","x","y")
+
+res_MF <- offenders_Origin[which(offenders_Origin$col_ID==3),]
+res_MF <- cbind(res_MF$ID, as.data.frame(res_MF$x), as.data.frame(res_MF$y))
+colnames(res_MF) <-  c("ID","x","y")
+
+#importing the street network shapefile
+road_Network <- readShapeSpatial('shapefiles/utm_SS_shp.shp')
+proj4string(road_Network) <- "+proj=utm +zone=16 +ellps=clrk66 +units=m +no_defs" # specify projection
+
+#this code create an image map of two classes:
+#class1: road network (of resistance zero), that allowing offenders move through. The road is buffered by 15m
+#class2: the background (of resistance 0.95 (Prob.value)), ensuring that offenders' movement is only restricted to the road
+landuse_map <- resistanceFromShape(road_Network, res = 5,
+	buffer=15, background = 0.95, margin = 10)
+#plot(landuse_map)
+
+#PARAMETER DEFINITIONS
+
+#variable to store crime records (details)
+offender_Info <- list()
+
+#TEMPORAL PARAMETERS
+#specify the temporal pattern to simulate 
+#"1" for "cyclic",
+#"2" for "high_short_interval", 
+#"3" for "random_T_clustering_
+#Each option corresponds to a "transition matrix" embedded to simulate the temporal pattern 
+
+temporal_pattern_to_simulate <- 1
+
+#the three temporal patterns are distinguished in terms of the transition matrix selected.
+
+#number of days to simulate
+n_days <- 365
+
+#start date for the simulation
+start_Date <- as.Date("2015-01-01")
+
+#------------------------
+#number of offenders to simulate
+n_walkers <- 300
+#-------------------------
+
+#SPATIAL PARAMETERS
+#Selecting (from the three residential landuse ids: 1, 2, 3) to represent the distribution of offenders' origins amongst the three categories
+offenders_Origin_cood <- sample(c(1,2,3), size=n_walkers, replace=TRUE, prob=c(0.05,0.15,0.8))
+
+#perceptual range to simulate (in metres)
+p_range <- 200
+
+#offenders' movement step (in metres)
+step_length <- 20
+
+
+
+#---------------------------------------------------------
+#SIMULATION STARTS
+#simulating all the crimes committed by offenders, one offender at a time.
+for(id in 1:n_walkers){##123 #id<-1
+
+#based on the list of residentl. land use ids created,  randomly select a starting location for the offender from the land use category
+if(offenders_Origin_cood[id]==1){#1
+init <- matrix(as.matrix(res_SF_Det[sample(1:nrow(res_SF_Det), size=1, replace=TRUE),2:3]),,2)
+}#1
+if(offenders_Origin_cood[id]==2){#1
+init <- matrix(as.matrix(res_SF_Att[sample(1:nrow(res_SF_Att), size=1, replace=TRUE),2:3]),,2)
+}#1
+if(offenders_Origin_cood[id]==3){#1
+init <- matrix(as.matrix(res_MF[sample(1:nrow(res_MF), size=1, replace=TRUE),2:3]),,2)
+}#1
+
+
+#Define a three-state movement behaviour for the offender (Levy walk),
+#State 1: "Exploring"
+#State 2: "Exploring but motivated"
+#State 3: "Offending" (correlation probability of 0.98)
+#Offending only occur at State 3.
+
+#------------------------------------
+#To simulate "cyclic" temporal pattern
+if(temporal_pattern_to_simulate == 1){
+levy.walker <- species(state.RW() + state.RW() + state.CRW(0.98),
+trans = transitionMatrix(0.5, 0.0001, 0.5, 0.028, 0.5, 0.5)) 
+}
+
+#------------------------------------
+#To simulate "high short-interval" temporal pattern
+if(temporal_pattern_to_simulate == 2){
+levy.walker <- species(state.RW() + state.RW() + state.CRW(0.98),
+trans = transitionMatrix(0.5, 0.0001, 0.5, 0.022, 0.5, 0.05))
+}
+
+#------------------------------------
+#To simulate "random" temporal pattern
+if(temporal_pattern_to_simulate == 3){
+levy.walker <- species(state.RW() + state.RW() + state.CRW(0.98),
+trans = transitionMatrix(0.5, 0.0001, 0.5, 0.041, 0.5, 0.5))
+}
+
+#adding the time steps and perceptual range
+levy.walker <- (levy.walker + step_length) * p_range
+
+crimes_Committed <- NULL
+
+#simulation
+sim.lw.road <- simulate(levy.walker, n_days,
+  resist = landuse_map, coords = init)
+
+#combining the dates of occurences
+sim.lw.road <- cbind(sim.lw.road, as.data.frame(start_Date))
+colnames(sim.lw.road) <- c("x", "y", "state", "date")
+
+sim.lw.road[,4] <- sim.lw.road[,4] + (1:length(sim.lw.road[,4])-1)
+
+#manually adding cyclic effects 
+#----------------------------
+if(temporal_pattern_to_simulate == 1){
+aaa<-c(1,2,3,4)
+crime_T <- sample(aaa, 1, replace=TRUE)
+
+index_Counter <- 0
+for(hh in 1: crime_T){#hh<-1
+if(hh==1){
+init_V <- sample(1:60, 1)
+index_Counter <- index_Counter + init_V
+	sim.lw.road[index_Counter,3] <- 2
+	}
+if(hh!=1){
+bbb<-c(sample(1:3, 1,prob=c(0.3,0.2,0.1)), sample(13:16,1,prob=c(0.2,0.3,0.3,0.2)), 
+	sample(28:31, 1,prob=c(0.2,0.3,0.3,0.2)),sample(43:46, 1,prob=c(0.2,0.3,0.3,0.2)),
+	sample(58:60, 1,prob=c(0.1,0.2,0.3)))
+
+init_V <- sample(bbb, 1, replace=TRUE)
+index_Counter <- index_Counter + init_V
+if(index_Counter<=n_days){#0909
+		sim.lw.road[index_Counter,3]<-2
+			}#0909
+		}
+	}#hh
+}
+#----------------------------
+
+#alternatively (for temporal patterns "3" and "3")
+if(temporal_pattern_to_simulate != 1){
+crimes_details <- sim.lw.road[which(sim.lw.road[,3]==2),]
+}
+
+#to check whether or not the offender commits any crime
+if(nrow(crimes_details)>=1){#4545
+crimes_details <- sim.lw.road[which(sim.lw.road[,3]==2),]
+
+crimes_details <- cbind(crimes_details, id)  #id<-1
+
+crimes_Committed <- rbind(crimes_Committed, crimes_details)
+
+the_Count <- c(the_Count, nrow(crimes_Committed))
+
+}#4545
+
+
+#flush.console()
+#print(id)
+
+offender_ID <- id
+offender_init_Coord <- init
+combine_Result <- list(offender_ID, offender_init_Coord, crimes_Committed)
+offender_Info[id] <- list(combine_Result)
+
+}##123
+
+#reset the "temporal pattern to simulate" to the default value of 1
+temporal_pattern_to_simulate <- 1
+
+#SIMULATION ENDS
+#---------------------------------------------------------
+
+
+#this code to unpack the synthetic dataset into a matrix format
+all_crimes <- NULL
+for(j in 1:length(offender_Info)){#j<-1
+	crimes <- offender_Info[[j]][[3]]
+n_row <- nrow(crimes)
+if(!is.null(n_row)){
+#if(n_row!=0){
+	crimes_ID <- offender_Info[[j]][[1]]
+	all_crimes <- rbind(all_crimes, crimes)	
+	 }
+	}#
+
+#-------------------------------------------------------#nrow(all_crimes)
+#displaying crime 'committed' by the first three offenders throughout the period of simulation
+offenders_1_to_5 <- all_crimes[which(all_crimes$id%in%c(1:3)),]
+
+offenders_1_to_5
+#-------------------------------------------------------
+
+
+```
 
 #References#
 
