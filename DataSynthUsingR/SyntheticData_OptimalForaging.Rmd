@@ -114,14 +114,14 @@ One additional parameter - perceptual range, K - must also be considered in rela
 
 **Previewing the dataset**
 
-```{r, echo=FALSE}
+```{r}
 dat = read.table(file="datasets/real dataset/chicago_2015_dataset.csv", sep=",", head=TRUE)
 head(dat)
 ```
 
 The following table shows the number of record in each synthetic datasets generated (distinguished by the value of K and the associated temporal pattern): 
 
-```{r, echo=FALSE}
+```{r}
 r = readRDS("extdata/synthetic_Count.rds")
 knitr::kable(r[c(1:4)], full_width = F, align=c(rep('c',times=2)), caption = "Table 1. Number of records for the synthetic datasets")
 ```
@@ -218,7 +218,7 @@ library(SiMRiv)
 
 ```
 
-```{r, echo=FALSE}
+```{r}
 
 #importing the land use data
 offenders_Origin <- readShapeSpatial('shapefiles/all_landuse_SS_UTM.shp')
@@ -227,14 +227,14 @@ proj4string(offenders_Origin) <- "+proj=utm +zone=16 +ellps=clrk66 +units=m +no_
 
 
 #plotting the landuse map
-colPallete<-c("green","blue","yellow","grey")
-landuseColors <- colPallete[offenders_Origin$col_ID]
-plot(offenders_Origin, col=landuseColors) 
-leg.txt <-c("l1", "l2", "l3", "l4")
-legend("right",   # location of legend
-	legend=unique(offenders_Origin$col_ID), # categories or elements to render in 
-             # the legend
-      fill=colPallete) # color pa
+# colPallete<-c("green","blue","yellow","grey")
+# landuseColors <- colPallete[offenders_Origin$col_ID]
+# plot(offenders_Origin, col=landuseColors) 
+# leg.txt <-c("l1", "l2", "l3", "l4")
+# legend("right",   # location of legend
+# 	legend=unique(offenders_Origin$col_ID), # categories or elements to render in 
+#              # the legend
+#       fill=colPallete) # color pa
 
 #extracting the centroid coordinates of the three residential buildings categories
 res_SF_Det <- offenders_Origin[which(offenders_Origin$col_ID==1),]
@@ -306,13 +306,14 @@ for(id in 1:n_walkers){##123 #id<-1
 
 #based on the list of residentl. land use ids created,  randomly select a starting location for the offender from the land use category
 if(offenders_Origin_cood[id]==1){#1
-init <- matrix(as.matrix(res_SF_Det[sample(1:nrow(res_SF_Det), size=1, replace=TRUE),2:3]),,2)
+init <- matrix(as.matrix(res_SF_Det[sample(1:nrow(res_SF_Det), size=1, replace=TRUE),2:3]), ,2)
 }#1
+  
 if(offenders_Origin_cood[id]==2){#1
-init <- matrix(as.matrix(res_SF_Att[sample(1:nrow(res_SF_Att), size=1, replace=TRUE),2:3]),,2)
+init <- matrix(as.matrix(res_SF_Att[sample(1:nrow(res_SF_Att), size=1, replace=TRUE),2:3]), ,2)
 }#1
 if(offenders_Origin_cood[id]==3){#1
-init <- matrix(as.matrix(res_MF[sample(1:nrow(res_MF), size=1, replace=TRUE),2:3]),,2)
+init <- matrix(as.matrix(res_MF[sample(1:nrow(res_MF), size=1, replace=TRUE),2:3]), ,2)
 }#1
 
 
@@ -386,12 +387,12 @@ if(index_Counter<=n_days){#0909
 }
 #----------------------------
 
-#alternatively (for temporal patterns "3" and "3")
-if(temporal_pattern_to_simulate != 1){
+#alternatively (for temporal patterns "2" and "3")
+#if(temporal_pattern_to_simulate != 1){
 crimes_details <- sim.lw.road[which(sim.lw.road[,3]==2),]
-}
+#}
 
-#to check whether or not the offender commits any crime
+
 if(nrow(crimes_details)>=1){#4545
 crimes_details <- sim.lw.road[which(sim.lw.road[,3]==2),]
 
@@ -399,9 +400,10 @@ crimes_details <- cbind(crimes_details, id)  #id<-1
 
 crimes_Committed <- rbind(crimes_Committed, crimes_details)
 
-the_Count <- c(the_Count, nrow(crimes_Committed))
+#the_Count <- c(the_Count, nrow(crimes_Committed))
 
 }#4545
+
 
 
 #flush.console()
@@ -438,6 +440,7 @@ if(!is.null(n_row)){
 offenders_1_to_5 <- all_crimes[which(all_crimes$id%in%c(1:3)),]
 
 offenders_1_to_5
+paste("Total number of crimes:",nrow(all_crimes), sep="   ")
 #-------------------------------------------------------
 
 
