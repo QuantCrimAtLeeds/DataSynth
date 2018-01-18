@@ -58,7 +58,7 @@ The movement model used (i.e. Levy's walk) requires two main parameters in order
 knitr::include_graphics("fig/landuse.png")
 ```
 
-**The perceptual range (K)** of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.
+**The perceptual range (K)**: of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.
 
 In this study, a list of the values of K is created in order to synthetise different spatial point distributions. For each simulation, it is assumed that all the offenders have the same perceptual range; an assumption that is unlikely to be true in real life.
 
@@ -450,7 +450,7 @@ paste("Total number of crimes:",nrow(all_crimes), sep="   ")
 
 Bowers, K.J. and Johnson, S.D., 2005. Domestic burglary repeats and space-time clusters: The dimensions of risk. European Journal of Criminology, 2(1), pp.67-92.
 
-Farrell, G. and Pease, K., 1993. Once bitten, twice bitten: Repeat victimisation and its implications for crime prevention. © Crown Copyright.
+Farrell, G. and Pease, K., 1993. Once bitten, twice bitten: Repeat victimisation and its implications for crime prevention. ? Crown Copyright.
 
 Johnson, S.D., 2014. How do offenders choose where to offend? Perspectives from animal foraging. Legal and Criminological Psychology, 19(2), pp.193-210
 

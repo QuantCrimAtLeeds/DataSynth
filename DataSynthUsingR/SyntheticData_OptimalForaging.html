@@ -11,7 +11,7 @@
 
 <meta name="author" content="Monsuru Adepeju" />
 
-<meta name="date" content="2018-01-04" />
+<meta name="date" content="2018-01-18" />
 
 <title>Simulation of Synthetic Crime Datasets</title>
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Simulation of ‘Synthetic’ Crime Datasets</h1>
 <h4 class="author"><em>Monsuru Adepeju</em></h4>
-<h4 class="date"><em>2018-01-04</em></h4>
+<h4 class="date"><em>2018-01-18</em></h4>
 
 </div>
 
@@ -164,7 +164,7 @@ Fig. 2: The spatial distribution of 2015 real burglary crimes of South Chicago
 Fig. 3: Residential land use of South Chicago
 </p>
 </div>
-<p><strong>The perceptual range (K)</strong> of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.</p>
+<p><strong>The perceptual range (K)</strong>: of an offender can be defined as the distance (radius) at which the offender perceives his environment, based, for example, on sense of vision, audition, knowledge etc. (Lima and Zollner, 1996). A perceptual range may be likened to the notion of spatial threshold in (spatial analysis), within which the offender evaluates the opportunities around him to evaluate his targets. The size of the perceptual range size may be defined based on expert knowledge, or simply estimated from real data using the likelihood approach.</p>
 <p>In this study, a list of the values of K is created in order to synthetise different spatial point distributions. For each simulation, it is assumed that all the offenders have the same perceptual range; an assumption that is unlikely to be true in real life.</p>
 </div>
 </div>
@@ -323,33 +323,27 @@ Fig. 7: Repeat pattern profiles of the real dataset and the synthetic datasets
 
 #&gt; Warning: use rgdal::readOGR or sf::st_read
 #&gt;            x       y state       date id
-#&gt; 2   449026.5 4624626     2 2015-01-02  1
-#&gt; 60  449190.6 4624614     2 2015-03-01  1
-#&gt; 62  449171.6 4624594     2 2015-03-03  1
-#&gt; 64  449171.6 4624594     2 2015-03-05  1
-#&gt; 91  449146.1 4624650     2 2015-04-01  1
-#&gt; 196 449088.1 4624637     2 2015-07-15  1
-#&gt; 10  447279.9 4633014     2 2015-01-10  2
-#&gt; 621 447136.5 4633013     2 2015-03-03  2
-#&gt; 89  447176.2 4633005     2 2015-03-30  2
-#&gt; 156 447165.7 4632955     2 2015-06-05  2
-#&gt; 188 447009.4 4632898     2 2015-07-07  2
-#&gt; 257 447107.5 4632889     2 2015-09-14  2
-#&gt; 275 447142.1 4632911     2 2015-10-02  2
-#&gt; 23  451314.0 4627347     2 2015-01-23  3
-#&gt; 81  451314.0 4627347     2 2015-03-22  3
-#&gt; 82  451314.0 4627347     2 2015-03-23  3
-#&gt; 84  451314.0 4627347     2 2015-03-25  3
-#&gt; 150 451314.0 4627347     2 2015-05-30  3
-#&gt; 207 451314.0 4627347     2 2015-07-26  3
-#&gt; 269 451314.0 4627347     2 2015-09-26  3
-#&gt; 347 451314.0 4627347     2 2015-12-13  3
-#&gt; [1] &quot;Total number of crimes:   2253&quot;</code></pre>
+#&gt; 4   446497.2 4631864     2 2015-01-04  1
+#&gt; 6   446497.2 4631864     2 2015-01-06  1
+#&gt; 20  446493.2 4631922     2 2015-01-20  1
+#&gt; 125 446342.1 4631924     2 2015-05-05  1
+#&gt; 236 446428.0 4632098     2 2015-08-24  1
+#&gt; 359 446396.1 4632003     2 2015-12-25  1
+#&gt; 14  448810.2 4622662     2 2015-01-14  2
+#&gt; 263 448738.3 4622808     2 2015-09-20  2
+#&gt; 31  448793.7 4623232     2 2015-01-31  3
+#&gt; 33  448798.7 4623251     2 2015-02-02  3
+#&gt; 34  448798.7 4623251     2 2015-02-03  3
+#&gt; 76  448804.9 4623260     2 2015-03-17  3
+#&gt; 112 448733.7 4623300     2 2015-04-22  3
+#&gt; 334 449025.2 4623529     2 2015-11-30  3
+#&gt; 345 449071.5 4623555     2 2015-12-11  3
+#&gt; [1] &quot;Total number of crimes:   2213&quot;</code></pre>
 </div>
 <div id="references" class="section level1">
 <h1><span class="header-section-number">11</span> References</h1>
 <p>Bowers, K.J. and Johnson, S.D., 2005. Domestic burglary repeats and space-time clusters: The dimensions of risk. European Journal of Criminology, 2(1), pp.67-92.</p>
-<p>Farrell, G. and Pease, K., 1993. Once bitten, twice bitten: Repeat victimisation and its implications for crime prevention. © Crown Copyright.</p>
+<p>Farrell, G. and Pease, K., 1993. Once bitten, twice bitten: Repeat victimisation and its implications for crime prevention. ? Crown Copyright.</p>
 <p>Johnson, S.D., 2014. How do offenders choose where to offend? Perspectives from animal foraging. Legal and Criminological Psychology, 19(2), pp.193-210</p>
 <p>Johnson, S.D., Bowers, K. and Hirschfield, A., 1997. New insights into the spatial and temporal distribution of repeat victimization. The British Journal of Criminology, 37(2), pp.224-241.</p>
 <p>Lima, S.L. and Zollner, P.A., 1996. Towards a behavioral ecology of ecological landscapes. Trends in Ecology &amp; Evolution, 11(3), pp.131-135.</p>
