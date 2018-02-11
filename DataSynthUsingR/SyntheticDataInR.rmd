@@ -51,7 +51,7 @@ Output: returns a matrix `xyt` (or a list of matrices if the `nsim>1`), containi
 animation(Hpp2$xyt, s.region=Hpp2$s.region)
 ```
 
-The above is a realisation of the Poisson process with intensity $\lambda=1000/(|S||T|)$, but conditioned to produce exactly 1500 points within $S$, the South Chicago boundary, and $T$, between the time interval 1 and 365 days. Coincident times are allowed by the `replace` argument. In the animation, time is treated as a quantitative mark highlighting the currency of the events. The points are fairly evenly distributed across the area.
+The above is a realisation of the Poisson process with intensity $\lambda=1000/(|S||T|)$, conditioned to produce exactly 1500 points within $S$ (South Chicago boundary), and $T$, between the time interval 1 and 365 days. Coincident times are allowed by the `replace` argument. In the animation, time is treated as a quantitative mark highlighting the currency of the events. The points are fairly evenly distributed across the area.
 
 **2. Inhomogeneous Poisson process (IHPP)**
 
